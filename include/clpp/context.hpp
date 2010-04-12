@@ -18,7 +18,8 @@ class Context {
 	public:
 		Context(cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
 		{
-			init(Platform::getFirstPlatform().id(), type);
+			Platform first_platform;
+			init(first_platform.id(), type);
 		}
 
 		Context(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)

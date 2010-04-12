@@ -3,17 +3,19 @@
 
 namespace clpp {
 
+/// The OpenCL device.
 class Device {
 	public:
-		Device(cl_device_id id = 0) : my_id(id) {}
+		/// Construct the Device object by the specified device ID.
+		Device(cl_device_id id) : my_id(id) {}
 
 		std::string getInfo(cl_device_info info) const
 		{
 			size_t len;
 			clGetDeviceInfo(my_id, info, 0, NULL, &len);
-			std::vector<char> buf(len);
+			std::string buf(len, 0);
 			clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
-			return std::string(&buf[0], len);
+			return buf;
 		}
 
 		template <typename T> T getInfo(cl_device_info info) const
@@ -25,18 +27,12 @@ class Device {
 
 		bool available() const
 		{
-			if(getInfo<cl_bool>(CL_DEVICE_AVAILABLE) == CL_TRUE)
-				return true;
-			else
-				return false;
+			return getInfo<cl_bool>(CL_DEVICE_AVAILABLE) == CL_TRUE;
 		}
 
 		bool hasCompiler() const
 		{
-			if(getInfo<cl_bool>(CL_DEVICE_COMPILER_AVAILABLE) == CL_TRUE)
-				return true;
-			else
-				return false;
+			return getInfo<cl_bool>(CL_DEVICE_COMPILER_AVAILABLE) == CL_TRUE;
 		}
 
 		std::string extensions() const
@@ -59,16 +55,17 @@ class Device {
 			return getInfo(CL_DEVICE_PROFILE);
 		}
 
+		/// Get the device type.
 		cl_device_type type() const
 		{
 			return getInfo<cl_device_type>(CL_DEVICE_TYPE);
 		}
 
+		/// Get the device ID.
 		cl_device_id id() const
 		{
 			return my_id;
 		}
-
 
 	private:
 		cl_device_id my_id;
