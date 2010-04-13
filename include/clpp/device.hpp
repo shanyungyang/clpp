@@ -1,6 +1,9 @@
 #ifndef CLPP_DEVICE_HPP
 #define CLPP_DEVICE_HPP
 
+#include "error.hpp"
+#include "vector.hpp"
+
 namespace clpp {
 
 /// The OpenCL device.
@@ -9,50 +12,40 @@ class Device {
         /// Construct the Device object by the specified device ID.
         Device(cl_device_id id) : my_id(id) {}
 
-        std::string getInfo(cl_device_info info) const
+        /// Get the device ID.
+        cl_device_id id() const
         {
-            size_t len;
-            clGetDeviceInfo(my_id, info, 0, NULL, &len);
-            std::string buf(len, 0);
-            clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
-            return buf;
+            return my_id;
         }
 
-        template <typename T> T getInfo(cl_device_info info) const
-        {
-            T result;
-            clGetDeviceInfo(my_id, info, sizeof(T), &result, NULL);
-            return result;
-        }
-
-        bool available() const
-        {
-            return getInfo<cl_bool>(CL_DEVICE_AVAILABLE) == CL_TRUE;
-        }
-
-        bool hasCompiler() const
-        {
-            return getInfo<cl_bool>(CL_DEVICE_COMPILER_AVAILABLE) == CL_TRUE;
-        }
-
-        std::string extensions() const
-        {
-            return getInfo(CL_DEVICE_EXTENSIONS);
-        }
-
+        /// Get the device name.
         std::string name() const
         {
-            return getInfo(CL_DEVICE_NAME);
+            return getInfo<std::string>(CL_DEVICE_NAME);
         }
 
+        /// Get the vendor of the device.
         std::string vendor() const
         {
-            return getInfo(CL_DEVICE_VENDOR);
+            return getInfo<std::string>(CL_DEVICE_VENDOR);
         }
 
+        /// Get the version string of the device.
+        std::string version() const
+        {
+            return getInfo<std::string>(CL_DEVICE_VERSION);
+        }
+
+        /// Get the profile string of the device.
         std::string profile() const
         {
-            return getInfo(CL_DEVICE_PROFILE);
+            return getInfo<std::string>(CL_DEVICE_PROFILE);
+        }
+
+        /// Get the extension string of the device.
+        std::string extensions() const
+        {
+            return getInfo<std::string>(CL_DEVICE_EXTENSIONS);
         }
 
         /// Get the device type.
@@ -61,15 +54,110 @@ class Device {
             return getInfo<cl_device_type>(CL_DEVICE_TYPE);
         }
 
-        /// Get the device ID.
-        cl_device_id id() const
+        /// Check if the device is available.
+        bool available() const
         {
-            return my_id;
+            return getInfo<cl_bool>(CL_DEVICE_AVAILABLE) == CL_TRUE;
+        }
+
+        /// Check if the device has the ability to compile device programs.
+        bool hasCompiler() const
+        {
+            return getInfo<cl_bool>(CL_DEVICE_COMPILER_AVAILABLE) == CL_TRUE;
+        }
+
+        /// Check if the device support error correction.
+        bool hasErrorCorrection() const
+        {
+            return getInfo<cl_bool>(CL_DEVICE_ERROR_CORRECTION_SUPPORT) == CL_TRUE;
+        }
+
+        /// Check if the device support images
+        bool supportImages() const
+        {
+            return getInfo<cl_bool>(CL_DEVICE_IMAGE_SUPPORT) == CL_TRUE;
+        }
+
+        bool supportNativeKernels()
+        {
+            return (getInfo<cl_device_exec_capabilities>(CL_DEVICE_EXECUTION_CAPABILITIES) & CL_EXEC_NATIVE_KERNEL) != 0;
+        }
+
+        size2 getImage2DMaxSize() const
+        {
+            return size2( getInfo<size_t>(CL_DEVICE_IMAGE2D_MAX_WIDTH),
+                          getInfo<size_t>(CL_DEVICE_IMAGE2D_MAX_HEIGHT) );
+        }
+
+        size3 getImage3DMaxSize() const
+        {
+            return size3( getInfo<size_t>(CL_DEVICE_IMAGE3D_MAX_WIDTH),
+                          getInfo<size_t>(CL_DEVICE_IMAGE3D_MAX_HEIGHT),
+                          getInfo<size_t>(CL_DEVICE_IMAGE3D_MAX_DEPTH) );
+        }
+
+        cl_uint getMaxClockFrequency() const
+        {
+            return getInfo<cl_uint>(CL_DEVICE_MAX_CLOCK_FREQUENCY);
+        }
+
+        cl_uint getMaxComputeUnits() const
+        {
+            return getInfo<cl_uint>(CL_DEVICE_MAX_COMPUTE_UNITS);
+        }
+
+        cl_ulong getGlobalMemorySize() const
+        {
+            return getInfo<cl_ulong>(CL_DEVICE_GLOBAL_MEM_SIZE);
+        }
+
+        cl_ulong getLocalMemorySize() const
+        {
+            return getInfo<cl_ulong>(CL_DEVICE_LOCAL_MEM_SIZE);
+        }
+
+        cl_ulong getMaxAllocatableSize() const
+        {
+            return getInfo<cl_ulong>(CL_DEVICE_MAX_MEM_ALLOC_SIZE);
+        }
+
+        size_t getMaxParameterSize() const
+        {
+            return getInfo<size_t>(CL_DEVICE_MAX_PARAMETER_SIZE);
+        }
+
+        size_t getMaxWorkGroupSize() const
+        {
+            return getInfo<size_t>(CL_DEVICE_MAX_WORK_GROUP_SIZE);
+        }
+
+        // TODO implement getMaxWorkItemSize()
+
+        /// Get device information by the specified type
+        template <typename T> T getInfo(cl_device_info info) const
+        {
+            T result;
+            cl_int err = clGetDeviceInfo(my_id, info, sizeof(T), &result, NULL);
+            CheckError(err);
+            return result;
+        }
+
+        /// Get device information string
+        template <> std::string getInfo<std::string>(cl_device_info info) const
+        {
+            size_t len;
+            cl_int err = clGetDeviceInfo(my_id, info, 0, NULL, &len);
+            CheckError(err);
+            std::string buf(len, 0);
+            err = clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
+            CheckError(err);
+            return buf;
         }
 
     private:
         cl_device_id my_id;
 }; // class Device
+
 
 } // namespace clpp
 

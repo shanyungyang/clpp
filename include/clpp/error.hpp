@@ -6,10 +6,10 @@
 
 namespace clpp {
 
-class Error : public std::exception {
+template <typename Base> class Error : public Base {
     public:
-        Error(cl_int code, const char* str) 
-            : std::exception(str), my_code(code)
+        Error(const char* str, cl_int code)
+            : Base(str), my_code(code)
         {}
 
         cl_int code()
@@ -19,21 +19,26 @@ class Error : public std::exception {
 
     private:
         cl_int my_code;
-}; // class Error
+}; // template <typename Base> class Error
+
+typedef Error<std::runtime_error> RuntimeError;
+typedef Error<std::invalid_argument> ArgumentError;
+typedef Error<std::logic_error> LogicError;
+
 
 #define CLPP_CHECK_RUNTIME_ERROR(name) \
     case name: \
-        throw std::runtime_error(#name); \
+        throw RuntimeError(#name, name); \
         break;
 
 #define CLPP_CHECK_INVALID_ARGUMENT_ERROR(name) \
     case name: \
-        throw std::invalid_argument(#name); \
+        throw ArgumentError(#name, name); \
         break;
 
 #define CLPP_CHECK_LOGIC_ERROR(name) \
     case name: \
-        throw std::logic_error(#name); \
+        throw LogicError(#name, name); \
         break;
 
 inline void CheckError(cl_int code)
@@ -88,10 +93,14 @@ inline void CheckError(cl_int code)
         CLPP_CHECK_LOGIC_ERROR(CL_PROFILING_INFO_NOT_AVAILABLE)
 
         default:
-            throw std::runtime_error("UNKNOWN");
+            throw RuntimeError("Unknow error code", code);
     };
 }
 
+
+#undef CLPP_CHECK_RUNTIME_ERROR
+#undef CLPP_CHECK_INVALID_ARGUMENT_ERROR
+#undef CLPP_CHECK_LOGIC_ERROR
 
 } // namespace clpp
 

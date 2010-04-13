@@ -1,0 +1,1 @@
+unit-test list-devices : list-devices.cpp /clpp//OpenCL ;
