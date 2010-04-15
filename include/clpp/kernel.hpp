@@ -9,6 +9,8 @@ namespace clpp {
 
 class Kernel {
     public:
+        Kernel(cl_kernel id) : my_resource(id) {}
+
         cl_kernel id() const
         {
             return *my_resource;
@@ -72,27 +74,17 @@ class Kernel {
         template <typename T> void setArg(cl_uint arg_index, const T& value)
         {
             cl_int err = clSetKernelArg(id(), arg_index, sizeof(T), &value);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
         }
 
         template <typename T> void setArg(cl_uint arg_index, const Buffer<T>& buffer)
         {
             cl_mem mem = buffer.id();
             cl_int err = clSetKernelArg(id(), arg_index, sizeof(cl_mem), &mem);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
         }
 
     private:
-        friend class Program;
-
-        Kernel(cl_program p, const char* kernel_name)
-        {
-            cl_int err;
-            cl_kernel k = clCreateKernel(p, kernel_name, &err);
-            CheckError(err);
-            my_resource.reset(k);
-        }
-
         Resource<cl_kernel> my_resource;
 }; // class Kernel
 

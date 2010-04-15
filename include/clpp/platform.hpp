@@ -15,10 +15,10 @@ namespace clpp {
 class Platform {
     public:
         /// Construct the object as the first available platform on the system. 
-        Platform()
+        Platform() : my_id(0)
         {
             cl_int err = clGetPlatformIDs(1, &my_id, 0);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             // TODO we should use a more specific type for errors.
             if(my_id == 0)
                 throw std::runtime_error("No available platform on this system");
@@ -38,10 +38,10 @@ class Platform {
         {
             size_t len;
             cl_int err = clGetPlatformInfo(my_id, info, 0, NULL, &len);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             std::string buf(len, 0);
             err = clGetPlatformInfo(my_id, info, len, &buf[0], NULL);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             return buf;
         }
 
@@ -75,14 +75,6 @@ class Platform {
             return getInfo(CL_PLATFORM_VERSION);
         }
 
-        /// Get number of devices on this platform with the specified device type.
-        size_t getNumberOfDevices(cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
-        {
-            cl_uint result;
-            clGetDeviceIDs(my_id, type, 0, NULL, &result);
-            return result;
-        }
-
     private:
         cl_platform_id my_id;
 
@@ -92,14 +84,14 @@ class PlatformList {
     public:
         PlatformList()
         {
-            size_t num;
+            size_t num = 0;
             cl_int err = clGetPlatformIDs(0, NULL, &num);
-            CheckError(err);
-            if(num == 0)
-                throw std::runtime_error("No available platform on this system");
+            if(num == 0) // we need to check the number before the error code
+                return;
+            CLPP_CHECK_ERROR(err);
             my_list.resize(num);
             err = clGetPlatformIDs(num, &my_list[0], NULL);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
         }
 
         size_t size() const
@@ -120,12 +112,25 @@ class DeviceList {
     public:
         DeviceList(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
         {
-            size_t num;
+            size_t num = 0;
             cl_int err = clGetDeviceIDs(platform.id(), type, 0, NULL, &num);
-            CheckError(err);
+            if(num == 0)
+                return;
+            CLPP_CHECK_ERROR(err);
             my_list.resize(num);
             err = clGetDeviceIDs(platform.id(), type, num, &my_list[0], NULL);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
+        }
+
+        /// Construct a empty device list
+        DeviceList() {}
+
+        /// Construct a device list which contains exactly one device
+        DeviceList(Device d) : my_list(1, d.id()) {}
+
+        void append(Device d)
+        {
+            my_list.push_back(d.id());
         }
 
         size_t size() const
@@ -136,6 +141,11 @@ class DeviceList {
         Device operator[](size_t i) const
         {
             return Device(my_list[i]);
+        }
+
+        const cl_device_id* data() const
+        {
+            return &my_list[0];
         }
 
     private:

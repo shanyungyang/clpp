@@ -12,6 +12,8 @@ namespace clpp {
 
 class Program {
     public:
+        Program(cl_program p) : my_resource(p) {}
+
         cl_program id()
         {
             return *my_resource;
@@ -40,20 +42,13 @@ class Program {
 
         Kernel kernel(const char* kernel_name)
         {
-            return Kernel(id(), kernel_name);
+            cl_int err = 0;
+            cl_kernel k = clCreateKernel(id(), kernel_name, &err);
+            CLPP_CHECK_ERROR(err);
+            return Kernel(k);
         }
 
     private:
-        friend class Context;
-
-        Program(cl_context context, const char* source)
-        {
-            cl_int err;
-            cl_program p = clCreateProgramWithSource(context, 1, const_cast<const char**>(&source), NULL, &err);
-            CheckError(err);
-            my_resource.reset(p);
-        }
-
         Resource<cl_program> my_resource;
 }; // class Program
 

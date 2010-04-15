@@ -72,13 +72,13 @@ class Device {
             return getInfo<cl_bool>(CL_DEVICE_ERROR_CORRECTION_SUPPORT) == CL_TRUE;
         }
 
-        /// Check if the device support images
-        bool supportImages() const
+        /// Check if the device supports images
+        bool hasImageSupport() const
         {
             return getInfo<cl_bool>(CL_DEVICE_IMAGE_SUPPORT) == CL_TRUE;
         }
 
-        bool supportNativeKernels()
+        bool hasNativeKernelSupport()
         {
             return (getInfo<cl_device_exec_capabilities>(CL_DEVICE_EXECUTION_CAPABILITIES) & CL_EXEC_NATIVE_KERNEL) != 0;
         }
@@ -106,17 +106,17 @@ class Device {
             return getInfo<cl_uint>(CL_DEVICE_MAX_COMPUTE_UNITS);
         }
 
-        cl_ulong getGlobalMemorySize() const
+        cl_ulong getGlobalMemSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_GLOBAL_MEM_SIZE);
         }
 
-        cl_ulong getLocalMemorySize() const
+        cl_ulong getLocalMemSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_LOCAL_MEM_SIZE);
         }
 
-        cl_ulong getMaxAllocatableSize() const
+        cl_ulong getMaxMemAllocSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_MAX_MEM_ALLOC_SIZE);
         }
@@ -131,14 +131,20 @@ class Device {
             return getInfo<size_t>(CL_DEVICE_MAX_WORK_GROUP_SIZE);
         }
 
-        // TODO implement getMaxWorkItemSize()
+        std::vector<size_t> getMaxWorkItemSizes()
+        {
+            size_t dim = getInfo<cl_uint>(CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS);
+            std::vector<size_t> msize(dim);
+            clGetDeviceInfo(id(), CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t)*dim, &msize[0], NULL);
+            return msize;
+        }
 
         /// Get device information by the specified type
         template <typename T> T getInfo(cl_device_info info) const
         {
             T result;
             cl_int err = clGetDeviceInfo(my_id, info, sizeof(T), &result, NULL);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             return result;
         }
 
@@ -147,10 +153,10 @@ class Device {
         {
             size_t len;
             cl_int err = clGetDeviceInfo(my_id, info, 0, NULL, &len);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             std::string buf(len, 0);
             err = clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
-            CheckError(err);
+            CLPP_CHECK_ERROR(err);
             return buf;
         }
 
