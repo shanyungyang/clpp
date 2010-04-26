@@ -78,17 +78,20 @@ class Device {
             return getInfo<cl_bool>(CL_DEVICE_IMAGE_SUPPORT) == CL_TRUE;
         }
 
+        /// Check if the device are capable to execute native kernels.
         bool hasNativeKernelSupport()
         {
             return (getInfo<cl_device_exec_capabilities>(CL_DEVICE_EXECUTION_CAPABILITIES) & CL_EXEC_NATIVE_KERNEL) != 0;
         }
 
+        /// Get the maximum size of a 2D image supported by the device.
         size2 getImage2DMaxSize() const
         {
             return size2( getInfo<size_t>(CL_DEVICE_IMAGE2D_MAX_WIDTH),
                           getInfo<size_t>(CL_DEVICE_IMAGE2D_MAX_HEIGHT) );
         }
 
+        /// Get the maximum size of a 3D image supported by the device.
         size3 getImage3DMaxSize() const
         {
             return size3( getInfo<size_t>(CL_DEVICE_IMAGE3D_MAX_WIDTH),
@@ -96,41 +99,55 @@ class Device {
                           getInfo<size_t>(CL_DEVICE_IMAGE3D_MAX_DEPTH) );
         }
 
+        /// Get the maximum clock frequency in MHz of this device.
         cl_uint getMaxClockFrequency() const
         {
             return getInfo<cl_uint>(CL_DEVICE_MAX_CLOCK_FREQUENCY);
         }
 
+        /// The number of parallel compute cores on the device.
         cl_uint getMaxComputeUnits() const
         {
             return getInfo<cl_uint>(CL_DEVICE_MAX_COMPUTE_UNITS);
         }
 
+        /// Get the size in bytes of global device memory.
         cl_ulong getGlobalMemSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_GLOBAL_MEM_SIZE);
         }
 
+        /// Get the size in bytes of local device memory.
         cl_ulong getLocalMemSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_LOCAL_MEM_SIZE);
         }
 
+        /// Get the maximum size in bytes of memory object allocation.
         cl_ulong getMaxMemAllocSize() const
         {
             return getInfo<cl_ulong>(CL_DEVICE_MAX_MEM_ALLOC_SIZE);
         }
 
+        /// Get the maximum size in bytes of arguments that can be passed
+        /// to kernels.
         size_t getMaxParameterSize() const
         {
             return getInfo<size_t>(CL_DEVICE_MAX_PARAMETER_SIZE);
         }
 
+        /// Get the maximum number of work-items in a work-group.
         size_t getMaxWorkGroupSize() const
         {
             return getInfo<size_t>(CL_DEVICE_MAX_WORK_GROUP_SIZE);
         }
 
+        /// Get the maximum number of work-items supported by this device.
+        /// The returned value is an n-dimensional vector where n is the
+        /// maximum dimension of work-items supported by the device, and
+        /// each element represents the maximum number of work-items that
+        /// can be specified in each dimension. The maximum number of
+        /// work-items is the product of each element in this vector.
         std::vector<size_t> getMaxWorkItemSizes()
         {
             size_t dim = getInfo<cl_uint>(CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS);
@@ -139,7 +156,7 @@ class Device {
             return msize;
         }
 
-        /// Get device information by the specified type
+        /// Get device information by the specified type.
         template <typename T> T getInfo(cl_device_info info) const
         {
             T result;
@@ -148,7 +165,7 @@ class Device {
             return result;
         }
 
-        /// Get device information string
+        /// Get device information string.
         template <> std::string getInfo<std::string>(cl_device_info info) const
         {
             size_t len;

@@ -4,7 +4,6 @@
 #include <fstream>
 #include <vector>
 
-
 #include "platform.hpp"
 #include "device.hpp"
 #include "commandqueue.hpp"
@@ -14,44 +13,55 @@
 
 namespace clpp {
 
+/// The OpenCL context.
 class Context {
     public:
+        /// Construct the context by the specified platform and device type.
+        /// By default, the first available platform on this system is used,
+        /// and the default device type is CL_DEVICE_TYPE_DEFAULT.
         Context(Platform platform = Platform(), cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
             : my_devices(platform, type)
         {
             initByPlatform(platform.id(), type);
         }
 
+        /// Construct the context by a list of devices.
         Context(DeviceList device_list) : my_devices(device_list)
         {
             initByDevices();
         }
 
+        /// Construct the context by a specific device.
         Context(Device device) : my_devices(device)
         {
             initByDevices();
         }
 
+        /// Get the cl_context object created by OpenCL API.
         cl_context id() const
         {
             return *my_resource;
         }
 
+        /// Get the i'th device object associated with this context.
         Device device(size_t i = 0) const
         {
             return my_devices[i];
         }
 
+        /// Get the number of devices associated with this context.
         size_t getNumberOfDevices() const
         {
             return my_devices.size();
         }
 
+        /// Get the i'th command queue associated with this context.
         CommandQueue& queue(size_t i = 0)
         {
             return my_queues[i];
         }
 
+        /// Create a buffer object.
         template <typename T> Buffer<T> createBuffer(size_t size, cl_mem_flags flags = CL_MEM_READ_WRITE, T* ptr = NULL)
         {
             cl_int err = 0;
@@ -60,6 +70,7 @@ class Context {
             return Buffer<T>(mem);
         }
 
+        /// Create a program object.
         Program readProgramSource(const char* source, const char* options = NULL)
         {
             cl_int err;
@@ -70,6 +81,7 @@ class Context {
             return Program(p);
         }
 
+        /// Create a program object.
         Program readProgramSourceFile(const char* filename, const char* options = NULL)
         {
             std::ifstream fin(filename, std::ios::binary);

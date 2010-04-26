@@ -35,9 +35,9 @@ class Program {
         {
             size_t len;
             clGetProgramBuildInfo(id(), device.id(), CL_PROGRAM_BUILD_LOG, 0, NULL, &len);
-            std::vector<char> buf(len);
+            std::string buf(len, 0);
             clGetProgramBuildInfo(id(), device.id(), CL_PROGRAM_BUILD_LOG, len, &buf[0], NULL);
-            return std::string(&buf[0], len);
+            return buf;
         }
 
         Kernel kernel(const char* kernel_name)

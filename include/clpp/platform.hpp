@@ -80,8 +80,10 @@ class Platform {
 
 }; // class Platform
 
+/// A list of platforms.
 class PlatformList {
     public:
+        /// Construct the list of available platforms on the system.
         PlatformList()
         {
             size_t num = 0;
@@ -94,11 +96,13 @@ class PlatformList {
             CLPP_CHECK_ERROR(err);
         }
 
+        /// The size of the platform list.
         size_t size() const
         {
             return my_list.size();
         }
 
+        /// The i'th platform of this list.
         Platform operator[](size_t i) const
         {
             return Platform(my_list[i]);
@@ -108,13 +112,16 @@ class PlatformList {
         std::vector<cl_platform_id> my_list;
 }; // class PlatformList
 
+/// A list of devices.
 class DeviceList {
     public:
+        /// Construct the device list which belong to the specified
+        /// device type, under the given platform.
         DeviceList(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
         {
             size_t num = 0;
             cl_int err = clGetDeviceIDs(platform.id(), type, 0, NULL, &num);
-            if(num == 0)
+            if(num == 0) // check the number before error code
                 return;
             CLPP_CHECK_ERROR(err);
             my_list.resize(num);
@@ -122,27 +129,50 @@ class DeviceList {
             CLPP_CHECK_ERROR(err);
         }
 
-        /// Construct a empty device list
+        /// Construct an empty device list.
         DeviceList() {}
 
-        /// Construct a device list which contains exactly one device
+        /// Construct the device list which contains exactly one device.
         DeviceList(Device d) : my_list(1, d.id()) {}
 
+        /// Append a device to this device list.
         void append(Device d)
         {
             my_list.push_back(d.id());
         }
 
+        /// Check if these devices are associated with the same platform.
+        bool checkPlatform() const
+        {
+            if(my_list.size() == 0)
+                return false;
+
+            cl_platform_id p0, pi;
+            cl_int err = clGetDeviceInfo(my_list[0], CL_DEVICE_PLATFORM, sizeof(cl_platform_id), &p0, NULL);
+            CLPP_CHECK_ERROR(err);
+            for(size_t i = 1; i < my_list.size(); ++i){
+                err = clGetDeviceInfo(my_list[0], CL_DEVICE_PLATFORM, sizeof(cl_platform_id), &pi, NULL);
+                CLPP_CHECK_ERROR(err);
+                if(p0 != pi)
+                    return false;
+            }
+            return true;
+        }
+
+        /// Get the number of devices in this list.
         size_t size() const
         {
             return my_list.size();
         }
 
+        /// Get the i'th device in this list.
         Device operator[](size_t i) const
         {
             return Device(my_list[i]);
         }
 
+        /// Get the raw pointer to cl_device_id in this list. Clients should 
+        /// not modify the content pointed by this function.
         const cl_device_id* data() const
         {
             return &my_list[0];
