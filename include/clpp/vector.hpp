@@ -1,3 +1,8 @@
+//          Copyright Shan-Yung Yang 2010.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef CLPP_VECTOR_HPP
 #define CLPP_VECTOR_HPP
 
@@ -11,6 +16,8 @@
 
 namespace clpp {
 
+/// Construct a 2-D char vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_char2 char2(cl_char a)
 {
     cl_char2 r;
@@ -18,6 +25,7 @@ inline cl_char2 char2(cl_char a)
     return r;
 }
 
+/// Construct a 2-D char vector from two elements.
 inline cl_char2 char2(cl_char a0, cl_char a1)
 {
     cl_char2 r;
@@ -25,6 +33,8 @@ inline cl_char2 char2(cl_char a0, cl_char a1)
     return r;
 }
 
+/// Construct a 4-D char vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_char4 char4(cl_char a)
 {
     cl_char4 r;
@@ -32,6 +42,7 @@ inline cl_char4 char4(cl_char a)
     return r;
 }
 
+/// Construct a 4-D char vector from four elements.
 inline cl_char4 char4(cl_char a0, cl_char a1, cl_char a2, cl_char a3)
 {
     cl_char4 r;
@@ -39,24 +50,33 @@ inline cl_char4 char4(cl_char a0, cl_char a1, cl_char a2, cl_char a3)
     return r;
 }
 
-#if defined( __CL_CHAR2__ )
+/// Construct a 4-D char vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_char4 char4(cl_char2 a)
 {
     cl_char4 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
-#if defined( __CL_CHAR2__ )
+/// Construct a 4-D char vector from two 2-D vectors.
 inline cl_char4 char4(cl_char2 a0, cl_char2 a1)
 {
     cl_char4 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
+/// Construct an 8-D char vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_char8 char8(cl_char a)
 {
     cl_char8 r;
@@ -65,6 +85,7 @@ inline cl_char8 char8(cl_char a)
     return r;
 }
 
+/// Construct an 8-D char vector from eight elements.
 inline cl_char8 char8(cl_char a0, cl_char a1, cl_char a2, cl_char a3, cl_char a4, cl_char a5, cl_char a6, cl_char a7)
 {
     cl_char8 r;
@@ -73,42 +94,62 @@ inline cl_char8 char8(cl_char a0, cl_char a1, cl_char a2, cl_char a3, cl_char a4
     return r;
 }
 
-#if defined( __CL_CHAR2__ )
+/// Construct an 8-D char vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_char8 char8(cl_char2 a)
 {
     cl_char8 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
-#if defined( __CL_CHAR2__ )
+/// Construct an 8-D char vector from four 2-D vectors.
 inline cl_char8 char8(cl_char2 a0, cl_char2 a1, cl_char2 a2, cl_char2 a3)
 {
     cl_char8 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
-#if defined( __CL_CHAR4__ )
+/// Construct an 8-D char vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_char8 char8(cl_char4 a)
 {
     cl_char8 r;
+#if defined( __CL_CHAR4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_CHAR4__
     return r;
 }
-#endif // __CL_CHAR4__
 
-#if defined( __CL_CHAR4__ )
+/// Construct an 8-D char vector from two 4-D vectors.
 inline cl_char8 char8(cl_char4 a0, cl_char4 a1)
 {
     cl_char8 r;
+#if defined( __CL_CHAR4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_CHAR4__
     return r;
 }
-#endif // __CL_CHAR4__
 
+/// Construct a 16-D char vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_char16 char16(cl_char a)
 {
     cl_char16 r;
@@ -119,6 +160,7 @@ inline cl_char16 char16(cl_char a)
     return r;
 }
 
+/// Construct a 16-D char vector from sixteen elements.
 inline cl_char16 char16(cl_char a0, cl_char a1, cl_char a2, cl_char a3, cl_char a4, cl_char a5, cl_char a6, cl_char a7, cl_char a8, cl_char a9, cl_char a10, cl_char a11, cl_char a12, cl_char a13, cl_char a14, cl_char a15)
 {
     cl_char16 r;
@@ -129,62 +171,103 @@ inline cl_char16 char16(cl_char a0, cl_char a1, cl_char a2, cl_char a3, cl_char 
     return r;
 }
 
-#if defined( __CL_CHAR2__ )
+/// Construct a 16-D char vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_char16 char16(cl_char2 a)
 {
     cl_char16 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
-#if defined( __CL_CHAR2__ )
+/// Construct a 16-D char vector from eight 2-D vectors.
 inline cl_char16 char16(cl_char2 a0, cl_char2 a1, cl_char2 a2, cl_char2 a3, cl_char2 a4, cl_char2 a5, cl_char2 a6, cl_char2 a7)
 {
     cl_char16 r;
+#if defined( __CL_CHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_CHAR2__
     return r;
 }
-#endif // __CL_CHAR2__
 
-#if defined( __CL_CHAR4__ )
+/// Construct a 16-D char vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_char16 char16(cl_char4 a)
 {
     cl_char16 r;
+#if defined( __CL_CHAR4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_CHAR4__
     return r;
 }
-#endif // __CL_CHAR4__
 
-#if defined( __CL_CHAR4__ )
+/// Construct a 16-D char vector from four 4-D vectors.
 inline cl_char16 char16(cl_char4 a0, cl_char4 a1, cl_char4 a2, cl_char4 a3)
 {
     cl_char16 r;
+#if defined( __CL_CHAR4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_CHAR4__
     return r;
 }
-#endif // __CL_CHAR4__
 
-#if defined( __CL_CHAR8__ )
+/// Construct a 16-D char vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_char16 char16(cl_char8 a)
 {
     cl_char16 r;
+#if defined( __CL_CHAR8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_CHAR8__
     return r;
 }
-#endif // __CL_CHAR8__
 
-#if defined( __CL_CHAR8__ )
+/// Construct a 16-D char vector from two 8-D vectors.
 inline cl_char16 char16(cl_char8 a0, cl_char8 a1)
 {
     cl_char16 r;
+#if defined( __CL_CHAR8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_CHAR8__
     return r;
 }
-#endif // __CL_CHAR8__
 
+/// Construct a 2-D uchar vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uchar2 uchar2(cl_uchar a)
 {
     cl_uchar2 r;
@@ -192,6 +275,7 @@ inline cl_uchar2 uchar2(cl_uchar a)
     return r;
 }
 
+/// Construct a 2-D uchar vector from two elements.
 inline cl_uchar2 uchar2(cl_uchar a0, cl_uchar a1)
 {
     cl_uchar2 r;
@@ -199,6 +283,8 @@ inline cl_uchar2 uchar2(cl_uchar a0, cl_uchar a1)
     return r;
 }
 
+/// Construct a 4-D uchar vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uchar4 uchar4(cl_uchar a)
 {
     cl_uchar4 r;
@@ -206,6 +292,7 @@ inline cl_uchar4 uchar4(cl_uchar a)
     return r;
 }
 
+/// Construct a 4-D uchar vector from four elements.
 inline cl_uchar4 uchar4(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3)
 {
     cl_uchar4 r;
@@ -213,24 +300,33 @@ inline cl_uchar4 uchar4(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3)
     return r;
 }
 
-#if defined( __CL_UCHAR2__ )
+/// Construct a 4-D uchar vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uchar4 uchar4(cl_uchar2 a)
 {
     cl_uchar4 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
-#if defined( __CL_UCHAR2__ )
+/// Construct a 4-D uchar vector from two 2-D vectors.
 inline cl_uchar4 uchar4(cl_uchar2 a0, cl_uchar2 a1)
 {
     cl_uchar4 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
+/// Construct an 8-D uchar vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uchar8 uchar8(cl_uchar a)
 {
     cl_uchar8 r;
@@ -239,6 +335,7 @@ inline cl_uchar8 uchar8(cl_uchar a)
     return r;
 }
 
+/// Construct an 8-D uchar vector from eight elements.
 inline cl_uchar8 uchar8(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3, cl_uchar a4, cl_uchar a5, cl_uchar a6, cl_uchar a7)
 {
     cl_uchar8 r;
@@ -247,42 +344,62 @@ inline cl_uchar8 uchar8(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3, cl_u
     return r;
 }
 
-#if defined( __CL_UCHAR2__ )
+/// Construct an 8-D uchar vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uchar8 uchar8(cl_uchar2 a)
 {
     cl_uchar8 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
-#if defined( __CL_UCHAR2__ )
+/// Construct an 8-D uchar vector from four 2-D vectors.
 inline cl_uchar8 uchar8(cl_uchar2 a0, cl_uchar2 a1, cl_uchar2 a2, cl_uchar2 a3)
 {
     cl_uchar8 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
-#if defined( __CL_UCHAR4__ )
+/// Construct an 8-D uchar vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_uchar8 uchar8(cl_uchar4 a)
 {
     cl_uchar8 r;
+#if defined( __CL_UCHAR4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_UCHAR4__
     return r;
 }
-#endif // __CL_UCHAR4__
 
-#if defined( __CL_UCHAR4__ )
+/// Construct an 8-D uchar vector from two 4-D vectors.
 inline cl_uchar8 uchar8(cl_uchar4 a0, cl_uchar4 a1)
 {
     cl_uchar8 r;
+#if defined( __CL_UCHAR4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_UCHAR4__
     return r;
 }
-#endif // __CL_UCHAR4__
 
+/// Construct a 16-D uchar vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uchar16 uchar16(cl_uchar a)
 {
     cl_uchar16 r;
@@ -293,6 +410,7 @@ inline cl_uchar16 uchar16(cl_uchar a)
     return r;
 }
 
+/// Construct a 16-D uchar vector from sixteen elements.
 inline cl_uchar16 uchar16(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3, cl_uchar a4, cl_uchar a5, cl_uchar a6, cl_uchar a7, cl_uchar a8, cl_uchar a9, cl_uchar a10, cl_uchar a11, cl_uchar a12, cl_uchar a13, cl_uchar a14, cl_uchar a15)
 {
     cl_uchar16 r;
@@ -303,62 +421,103 @@ inline cl_uchar16 uchar16(cl_uchar a0, cl_uchar a1, cl_uchar a2, cl_uchar a3, cl
     return r;
 }
 
-#if defined( __CL_UCHAR2__ )
+/// Construct a 16-D uchar vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uchar16 uchar16(cl_uchar2 a)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
-#if defined( __CL_UCHAR2__ )
+/// Construct a 16-D uchar vector from eight 2-D vectors.
 inline cl_uchar16 uchar16(cl_uchar2 a0, cl_uchar2 a1, cl_uchar2 a2, cl_uchar2 a3, cl_uchar2 a4, cl_uchar2 a5, cl_uchar2 a6, cl_uchar2 a7)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_UCHAR2__
     return r;
 }
-#endif // __CL_UCHAR2__
 
-#if defined( __CL_UCHAR4__ )
+/// Construct a 16-D uchar vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_uchar16 uchar16(cl_uchar4 a)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_UCHAR4__
     return r;
 }
-#endif // __CL_UCHAR4__
 
-#if defined( __CL_UCHAR4__ )
+/// Construct a 16-D uchar vector from four 4-D vectors.
 inline cl_uchar16 uchar16(cl_uchar4 a0, cl_uchar4 a1, cl_uchar4 a2, cl_uchar4 a3)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_UCHAR4__
     return r;
 }
-#endif // __CL_UCHAR4__
 
-#if defined( __CL_UCHAR8__ )
+/// Construct a 16-D uchar vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_uchar16 uchar16(cl_uchar8 a)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_UCHAR8__
     return r;
 }
-#endif // __CL_UCHAR8__
 
-#if defined( __CL_UCHAR8__ )
+/// Construct a 16-D uchar vector from two 8-D vectors.
 inline cl_uchar16 uchar16(cl_uchar8 a0, cl_uchar8 a1)
 {
     cl_uchar16 r;
+#if defined( __CL_UCHAR8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_UCHAR8__
     return r;
 }
-#endif // __CL_UCHAR8__
 
+/// Construct a 2-D short vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_short2 short2(cl_short a)
 {
     cl_short2 r;
@@ -366,6 +525,7 @@ inline cl_short2 short2(cl_short a)
     return r;
 }
 
+/// Construct a 2-D short vector from two elements.
 inline cl_short2 short2(cl_short a0, cl_short a1)
 {
     cl_short2 r;
@@ -373,6 +533,8 @@ inline cl_short2 short2(cl_short a0, cl_short a1)
     return r;
 }
 
+/// Construct a 4-D short vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_short4 short4(cl_short a)
 {
     cl_short4 r;
@@ -380,6 +542,7 @@ inline cl_short4 short4(cl_short a)
     return r;
 }
 
+/// Construct a 4-D short vector from four elements.
 inline cl_short4 short4(cl_short a0, cl_short a1, cl_short a2, cl_short a3)
 {
     cl_short4 r;
@@ -387,24 +550,33 @@ inline cl_short4 short4(cl_short a0, cl_short a1, cl_short a2, cl_short a3)
     return r;
 }
 
-#if defined( __CL_SHORT2__ )
+/// Construct a 4-D short vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_short4 short4(cl_short2 a)
 {
     cl_short4 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
-#if defined( __CL_SHORT2__ )
+/// Construct a 4-D short vector from two 2-D vectors.
 inline cl_short4 short4(cl_short2 a0, cl_short2 a1)
 {
     cl_short4 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
+/// Construct an 8-D short vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_short8 short8(cl_short a)
 {
     cl_short8 r;
@@ -413,6 +585,7 @@ inline cl_short8 short8(cl_short a)
     return r;
 }
 
+/// Construct an 8-D short vector from eight elements.
 inline cl_short8 short8(cl_short a0, cl_short a1, cl_short a2, cl_short a3, cl_short a4, cl_short a5, cl_short a6, cl_short a7)
 {
     cl_short8 r;
@@ -421,42 +594,62 @@ inline cl_short8 short8(cl_short a0, cl_short a1, cl_short a2, cl_short a3, cl_s
     return r;
 }
 
-#if defined( __CL_SHORT2__ )
+/// Construct an 8-D short vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_short8 short8(cl_short2 a)
 {
     cl_short8 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
-#if defined( __CL_SHORT2__ )
+/// Construct an 8-D short vector from four 2-D vectors.
 inline cl_short8 short8(cl_short2 a0, cl_short2 a1, cl_short2 a2, cl_short2 a3)
 {
     cl_short8 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
-#if defined( __CL_SHORT4__ )
+/// Construct an 8-D short vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_short8 short8(cl_short4 a)
 {
     cl_short8 r;
+#if defined( __CL_SHORT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_SHORT4__
     return r;
 }
-#endif // __CL_SHORT4__
 
-#if defined( __CL_SHORT4__ )
+/// Construct an 8-D short vector from two 4-D vectors.
 inline cl_short8 short8(cl_short4 a0, cl_short4 a1)
 {
     cl_short8 r;
+#if defined( __CL_SHORT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_SHORT4__
     return r;
 }
-#endif // __CL_SHORT4__
 
+/// Construct a 16-D short vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_short16 short16(cl_short a)
 {
     cl_short16 r;
@@ -467,6 +660,7 @@ inline cl_short16 short16(cl_short a)
     return r;
 }
 
+/// Construct a 16-D short vector from sixteen elements.
 inline cl_short16 short16(cl_short a0, cl_short a1, cl_short a2, cl_short a3, cl_short a4, cl_short a5, cl_short a6, cl_short a7, cl_short a8, cl_short a9, cl_short a10, cl_short a11, cl_short a12, cl_short a13, cl_short a14, cl_short a15)
 {
     cl_short16 r;
@@ -477,62 +671,103 @@ inline cl_short16 short16(cl_short a0, cl_short a1, cl_short a2, cl_short a3, cl
     return r;
 }
 
-#if defined( __CL_SHORT2__ )
+/// Construct a 16-D short vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_short16 short16(cl_short2 a)
 {
     cl_short16 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
-#if defined( __CL_SHORT2__ )
+/// Construct a 16-D short vector from eight 2-D vectors.
 inline cl_short16 short16(cl_short2 a0, cl_short2 a1, cl_short2 a2, cl_short2 a3, cl_short2 a4, cl_short2 a5, cl_short2 a6, cl_short2 a7)
 {
     cl_short16 r;
+#if defined( __CL_SHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_SHORT2__
     return r;
 }
-#endif // __CL_SHORT2__
 
-#if defined( __CL_SHORT4__ )
+/// Construct a 16-D short vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_short16 short16(cl_short4 a)
 {
     cl_short16 r;
+#if defined( __CL_SHORT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_SHORT4__
     return r;
 }
-#endif // __CL_SHORT4__
 
-#if defined( __CL_SHORT4__ )
+/// Construct a 16-D short vector from four 4-D vectors.
 inline cl_short16 short16(cl_short4 a0, cl_short4 a1, cl_short4 a2, cl_short4 a3)
 {
     cl_short16 r;
+#if defined( __CL_SHORT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_SHORT4__
     return r;
 }
-#endif // __CL_SHORT4__
 
-#if defined( __CL_SHORT8__ )
+/// Construct a 16-D short vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_short16 short16(cl_short8 a)
 {
     cl_short16 r;
+#if defined( __CL_SHORT8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_SHORT8__
     return r;
 }
-#endif // __CL_SHORT8__
 
-#if defined( __CL_SHORT8__ )
+/// Construct a 16-D short vector from two 8-D vectors.
 inline cl_short16 short16(cl_short8 a0, cl_short8 a1)
 {
     cl_short16 r;
+#if defined( __CL_SHORT8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_SHORT8__
     return r;
 }
-#endif // __CL_SHORT8__
 
+/// Construct a 2-D ushort vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ushort2 ushort2(cl_ushort a)
 {
     cl_ushort2 r;
@@ -540,6 +775,7 @@ inline cl_ushort2 ushort2(cl_ushort a)
     return r;
 }
 
+/// Construct a 2-D ushort vector from two elements.
 inline cl_ushort2 ushort2(cl_ushort a0, cl_ushort a1)
 {
     cl_ushort2 r;
@@ -547,6 +783,8 @@ inline cl_ushort2 ushort2(cl_ushort a0, cl_ushort a1)
     return r;
 }
 
+/// Construct a 4-D ushort vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ushort4 ushort4(cl_ushort a)
 {
     cl_ushort4 r;
@@ -554,6 +792,7 @@ inline cl_ushort4 ushort4(cl_ushort a)
     return r;
 }
 
+/// Construct a 4-D ushort vector from four elements.
 inline cl_ushort4 ushort4(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort a3)
 {
     cl_ushort4 r;
@@ -561,24 +800,33 @@ inline cl_ushort4 ushort4(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort a3
     return r;
 }
 
-#if defined( __CL_USHORT2__ )
+/// Construct a 4-D ushort vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ushort4 ushort4(cl_ushort2 a)
 {
     cl_ushort4 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
-#if defined( __CL_USHORT2__ )
+/// Construct a 4-D ushort vector from two 2-D vectors.
 inline cl_ushort4 ushort4(cl_ushort2 a0, cl_ushort2 a1)
 {
     cl_ushort4 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
+/// Construct an 8-D ushort vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ushort8 ushort8(cl_ushort a)
 {
     cl_ushort8 r;
@@ -587,6 +835,7 @@ inline cl_ushort8 ushort8(cl_ushort a)
     return r;
 }
 
+/// Construct an 8-D ushort vector from eight elements.
 inline cl_ushort8 ushort8(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort a3, cl_ushort a4, cl_ushort a5, cl_ushort a6, cl_ushort a7)
 {
     cl_ushort8 r;
@@ -595,42 +844,62 @@ inline cl_ushort8 ushort8(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort a3
     return r;
 }
 
-#if defined( __CL_USHORT2__ )
+/// Construct an 8-D ushort vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ushort8 ushort8(cl_ushort2 a)
 {
     cl_ushort8 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
-#if defined( __CL_USHORT2__ )
+/// Construct an 8-D ushort vector from four 2-D vectors.
 inline cl_ushort8 ushort8(cl_ushort2 a0, cl_ushort2 a1, cl_ushort2 a2, cl_ushort2 a3)
 {
     cl_ushort8 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
-#if defined( __CL_USHORT4__ )
+/// Construct an 8-D ushort vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_ushort8 ushort8(cl_ushort4 a)
 {
     cl_ushort8 r;
+#if defined( __CL_USHORT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_USHORT4__
     return r;
 }
-#endif // __CL_USHORT4__
 
-#if defined( __CL_USHORT4__ )
+/// Construct an 8-D ushort vector from two 4-D vectors.
 inline cl_ushort8 ushort8(cl_ushort4 a0, cl_ushort4 a1)
 {
     cl_ushort8 r;
+#if defined( __CL_USHORT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_USHORT4__
     return r;
 }
-#endif // __CL_USHORT4__
 
+/// Construct a 16-D ushort vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ushort16 ushort16(cl_ushort a)
 {
     cl_ushort16 r;
@@ -641,6 +910,7 @@ inline cl_ushort16 ushort16(cl_ushort a)
     return r;
 }
 
+/// Construct a 16-D ushort vector from sixteen elements.
 inline cl_ushort16 ushort16(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort a3, cl_ushort a4, cl_ushort a5, cl_ushort a6, cl_ushort a7, cl_ushort a8, cl_ushort a9, cl_ushort a10, cl_ushort a11, cl_ushort a12, cl_ushort a13, cl_ushort a14, cl_ushort a15)
 {
     cl_ushort16 r;
@@ -651,62 +921,103 @@ inline cl_ushort16 ushort16(cl_ushort a0, cl_ushort a1, cl_ushort a2, cl_ushort 
     return r;
 }
 
-#if defined( __CL_USHORT2__ )
+/// Construct a 16-D ushort vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ushort16 ushort16(cl_ushort2 a)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
-#if defined( __CL_USHORT2__ )
+/// Construct a 16-D ushort vector from eight 2-D vectors.
 inline cl_ushort16 ushort16(cl_ushort2 a0, cl_ushort2 a1, cl_ushort2 a2, cl_ushort2 a3, cl_ushort2 a4, cl_ushort2 a5, cl_ushort2 a6, cl_ushort2 a7)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_USHORT2__
     return r;
 }
-#endif // __CL_USHORT2__
 
-#if defined( __CL_USHORT4__ )
+/// Construct a 16-D ushort vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_ushort16 ushort16(cl_ushort4 a)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_USHORT4__
     return r;
 }
-#endif // __CL_USHORT4__
 
-#if defined( __CL_USHORT4__ )
+/// Construct a 16-D ushort vector from four 4-D vectors.
 inline cl_ushort16 ushort16(cl_ushort4 a0, cl_ushort4 a1, cl_ushort4 a2, cl_ushort4 a3)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_USHORT4__
     return r;
 }
-#endif // __CL_USHORT4__
 
-#if defined( __CL_USHORT8__ )
+/// Construct a 16-D ushort vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_ushort16 ushort16(cl_ushort8 a)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_USHORT8__
     return r;
 }
-#endif // __CL_USHORT8__
 
-#if defined( __CL_USHORT8__ )
+/// Construct a 16-D ushort vector from two 8-D vectors.
 inline cl_ushort16 ushort16(cl_ushort8 a0, cl_ushort8 a1)
 {
     cl_ushort16 r;
+#if defined( __CL_USHORT8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_USHORT8__
     return r;
 }
-#endif // __CL_USHORT8__
 
+/// Construct a 2-D int vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_int2 int2(cl_int a)
 {
     cl_int2 r;
@@ -714,6 +1025,7 @@ inline cl_int2 int2(cl_int a)
     return r;
 }
 
+/// Construct a 2-D int vector from two elements.
 inline cl_int2 int2(cl_int a0, cl_int a1)
 {
     cl_int2 r;
@@ -721,6 +1033,8 @@ inline cl_int2 int2(cl_int a0, cl_int a1)
     return r;
 }
 
+/// Construct a 4-D int vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_int4 int4(cl_int a)
 {
     cl_int4 r;
@@ -728,6 +1042,7 @@ inline cl_int4 int4(cl_int a)
     return r;
 }
 
+/// Construct a 4-D int vector from four elements.
 inline cl_int4 int4(cl_int a0, cl_int a1, cl_int a2, cl_int a3)
 {
     cl_int4 r;
@@ -735,24 +1050,33 @@ inline cl_int4 int4(cl_int a0, cl_int a1, cl_int a2, cl_int a3)
     return r;
 }
 
-#if defined( __CL_INT2__ )
+/// Construct a 4-D int vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_int4 int4(cl_int2 a)
 {
     cl_int4 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
-#if defined( __CL_INT2__ )
+/// Construct a 4-D int vector from two 2-D vectors.
 inline cl_int4 int4(cl_int2 a0, cl_int2 a1)
 {
     cl_int4 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
+/// Construct an 8-D int vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_int8 int8(cl_int a)
 {
     cl_int8 r;
@@ -761,6 +1085,7 @@ inline cl_int8 int8(cl_int a)
     return r;
 }
 
+/// Construct an 8-D int vector from eight elements.
 inline cl_int8 int8(cl_int a0, cl_int a1, cl_int a2, cl_int a3, cl_int a4, cl_int a5, cl_int a6, cl_int a7)
 {
     cl_int8 r;
@@ -769,42 +1094,62 @@ inline cl_int8 int8(cl_int a0, cl_int a1, cl_int a2, cl_int a3, cl_int a4, cl_in
     return r;
 }
 
-#if defined( __CL_INT2__ )
+/// Construct an 8-D int vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_int8 int8(cl_int2 a)
 {
     cl_int8 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
-#if defined( __CL_INT2__ )
+/// Construct an 8-D int vector from four 2-D vectors.
 inline cl_int8 int8(cl_int2 a0, cl_int2 a1, cl_int2 a2, cl_int2 a3)
 {
     cl_int8 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
-#if defined( __CL_INT4__ )
+/// Construct an 8-D int vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_int8 int8(cl_int4 a)
 {
     cl_int8 r;
+#if defined( __CL_INT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_INT4__
     return r;
 }
-#endif // __CL_INT4__
 
-#if defined( __CL_INT4__ )
+/// Construct an 8-D int vector from two 4-D vectors.
 inline cl_int8 int8(cl_int4 a0, cl_int4 a1)
 {
     cl_int8 r;
+#if defined( __CL_INT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_INT4__
     return r;
 }
-#endif // __CL_INT4__
 
+/// Construct a 16-D int vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_int16 int16(cl_int a)
 {
     cl_int16 r;
@@ -815,6 +1160,7 @@ inline cl_int16 int16(cl_int a)
     return r;
 }
 
+/// Construct a 16-D int vector from sixteen elements.
 inline cl_int16 int16(cl_int a0, cl_int a1, cl_int a2, cl_int a3, cl_int a4, cl_int a5, cl_int a6, cl_int a7, cl_int a8, cl_int a9, cl_int a10, cl_int a11, cl_int a12, cl_int a13, cl_int a14, cl_int a15)
 {
     cl_int16 r;
@@ -825,62 +1171,103 @@ inline cl_int16 int16(cl_int a0, cl_int a1, cl_int a2, cl_int a3, cl_int a4, cl_
     return r;
 }
 
-#if defined( __CL_INT2__ )
+/// Construct a 16-D int vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_int16 int16(cl_int2 a)
 {
     cl_int16 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
-#if defined( __CL_INT2__ )
+/// Construct a 16-D int vector from eight 2-D vectors.
 inline cl_int16 int16(cl_int2 a0, cl_int2 a1, cl_int2 a2, cl_int2 a3, cl_int2 a4, cl_int2 a5, cl_int2 a6, cl_int2 a7)
 {
     cl_int16 r;
+#if defined( __CL_INT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_INT2__
     return r;
 }
-#endif // __CL_INT2__
 
-#if defined( __CL_INT4__ )
+/// Construct a 16-D int vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_int16 int16(cl_int4 a)
 {
     cl_int16 r;
+#if defined( __CL_INT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_INT4__
     return r;
 }
-#endif // __CL_INT4__
 
-#if defined( __CL_INT4__ )
+/// Construct a 16-D int vector from four 4-D vectors.
 inline cl_int16 int16(cl_int4 a0, cl_int4 a1, cl_int4 a2, cl_int4 a3)
 {
     cl_int16 r;
+#if defined( __CL_INT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_INT4__
     return r;
 }
-#endif // __CL_INT4__
 
-#if defined( __CL_INT8__ )
+/// Construct a 16-D int vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_int16 int16(cl_int8 a)
 {
     cl_int16 r;
+#if defined( __CL_INT8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_INT8__
     return r;
 }
-#endif // __CL_INT8__
 
-#if defined( __CL_INT8__ )
+/// Construct a 16-D int vector from two 8-D vectors.
 inline cl_int16 int16(cl_int8 a0, cl_int8 a1)
 {
     cl_int16 r;
+#if defined( __CL_INT8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_INT8__
     return r;
 }
-#endif // __CL_INT8__
 
+/// Construct a 2-D uint vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uint2 uint2(cl_uint a)
 {
     cl_uint2 r;
@@ -888,6 +1275,7 @@ inline cl_uint2 uint2(cl_uint a)
     return r;
 }
 
+/// Construct a 2-D uint vector from two elements.
 inline cl_uint2 uint2(cl_uint a0, cl_uint a1)
 {
     cl_uint2 r;
@@ -895,6 +1283,8 @@ inline cl_uint2 uint2(cl_uint a0, cl_uint a1)
     return r;
 }
 
+/// Construct a 4-D uint vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uint4 uint4(cl_uint a)
 {
     cl_uint4 r;
@@ -902,6 +1292,7 @@ inline cl_uint4 uint4(cl_uint a)
     return r;
 }
 
+/// Construct a 4-D uint vector from four elements.
 inline cl_uint4 uint4(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3)
 {
     cl_uint4 r;
@@ -909,24 +1300,33 @@ inline cl_uint4 uint4(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3)
     return r;
 }
 
-#if defined( __CL_UINT2__ )
+/// Construct a 4-D uint vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uint4 uint4(cl_uint2 a)
 {
     cl_uint4 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
-#if defined( __CL_UINT2__ )
+/// Construct a 4-D uint vector from two 2-D vectors.
 inline cl_uint4 uint4(cl_uint2 a0, cl_uint2 a1)
 {
     cl_uint4 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
+/// Construct an 8-D uint vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uint8 uint8(cl_uint a)
 {
     cl_uint8 r;
@@ -935,6 +1335,7 @@ inline cl_uint8 uint8(cl_uint a)
     return r;
 }
 
+/// Construct an 8-D uint vector from eight elements.
 inline cl_uint8 uint8(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3, cl_uint a4, cl_uint a5, cl_uint a6, cl_uint a7)
 {
     cl_uint8 r;
@@ -943,42 +1344,62 @@ inline cl_uint8 uint8(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3, cl_uint a4
     return r;
 }
 
-#if defined( __CL_UINT2__ )
+/// Construct an 8-D uint vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uint8 uint8(cl_uint2 a)
 {
     cl_uint8 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
-#if defined( __CL_UINT2__ )
+/// Construct an 8-D uint vector from four 2-D vectors.
 inline cl_uint8 uint8(cl_uint2 a0, cl_uint2 a1, cl_uint2 a2, cl_uint2 a3)
 {
     cl_uint8 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
-#if defined( __CL_UINT4__ )
+/// Construct an 8-D uint vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_uint8 uint8(cl_uint4 a)
 {
     cl_uint8 r;
+#if defined( __CL_UINT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_UINT4__
     return r;
 }
-#endif // __CL_UINT4__
 
-#if defined( __CL_UINT4__ )
+/// Construct an 8-D uint vector from two 4-D vectors.
 inline cl_uint8 uint8(cl_uint4 a0, cl_uint4 a1)
 {
     cl_uint8 r;
+#if defined( __CL_UINT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_UINT4__
     return r;
 }
-#endif // __CL_UINT4__
 
+/// Construct a 16-D uint vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_uint16 uint16(cl_uint a)
 {
     cl_uint16 r;
@@ -989,6 +1410,7 @@ inline cl_uint16 uint16(cl_uint a)
     return r;
 }
 
+/// Construct a 16-D uint vector from sixteen elements.
 inline cl_uint16 uint16(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3, cl_uint a4, cl_uint a5, cl_uint a6, cl_uint a7, cl_uint a8, cl_uint a9, cl_uint a10, cl_uint a11, cl_uint a12, cl_uint a13, cl_uint a14, cl_uint a15)
 {
     cl_uint16 r;
@@ -999,62 +1421,103 @@ inline cl_uint16 uint16(cl_uint a0, cl_uint a1, cl_uint a2, cl_uint a3, cl_uint 
     return r;
 }
 
-#if defined( __CL_UINT2__ )
+/// Construct a 16-D uint vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_uint16 uint16(cl_uint2 a)
 {
     cl_uint16 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
-#if defined( __CL_UINT2__ )
+/// Construct a 16-D uint vector from eight 2-D vectors.
 inline cl_uint16 uint16(cl_uint2 a0, cl_uint2 a1, cl_uint2 a2, cl_uint2 a3, cl_uint2 a4, cl_uint2 a5, cl_uint2 a6, cl_uint2 a7)
 {
     cl_uint16 r;
+#if defined( __CL_UINT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_UINT2__
     return r;
 }
-#endif // __CL_UINT2__
 
-#if defined( __CL_UINT4__ )
+/// Construct a 16-D uint vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_uint16 uint16(cl_uint4 a)
 {
     cl_uint16 r;
+#if defined( __CL_UINT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_UINT4__
     return r;
 }
-#endif // __CL_UINT4__
 
-#if defined( __CL_UINT4__ )
+/// Construct a 16-D uint vector from four 4-D vectors.
 inline cl_uint16 uint16(cl_uint4 a0, cl_uint4 a1, cl_uint4 a2, cl_uint4 a3)
 {
     cl_uint16 r;
+#if defined( __CL_UINT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_UINT4__
     return r;
 }
-#endif // __CL_UINT4__
 
-#if defined( __CL_UINT8__ )
+/// Construct a 16-D uint vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_uint16 uint16(cl_uint8 a)
 {
     cl_uint16 r;
+#if defined( __CL_UINT8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_UINT8__
     return r;
 }
-#endif // __CL_UINT8__
 
-#if defined( __CL_UINT8__ )
+/// Construct a 16-D uint vector from two 8-D vectors.
 inline cl_uint16 uint16(cl_uint8 a0, cl_uint8 a1)
 {
     cl_uint16 r;
+#if defined( __CL_UINT8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_UINT8__
     return r;
 }
-#endif // __CL_UINT8__
 
+/// Construct a 2-D long vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_long2 long2(cl_long a)
 {
     cl_long2 r;
@@ -1062,6 +1525,7 @@ inline cl_long2 long2(cl_long a)
     return r;
 }
 
+/// Construct a 2-D long vector from two elements.
 inline cl_long2 long2(cl_long a0, cl_long a1)
 {
     cl_long2 r;
@@ -1069,6 +1533,8 @@ inline cl_long2 long2(cl_long a0, cl_long a1)
     return r;
 }
 
+/// Construct a 4-D long vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_long4 long4(cl_long a)
 {
     cl_long4 r;
@@ -1076,6 +1542,7 @@ inline cl_long4 long4(cl_long a)
     return r;
 }
 
+/// Construct a 4-D long vector from four elements.
 inline cl_long4 long4(cl_long a0, cl_long a1, cl_long a2, cl_long a3)
 {
     cl_long4 r;
@@ -1083,24 +1550,33 @@ inline cl_long4 long4(cl_long a0, cl_long a1, cl_long a2, cl_long a3)
     return r;
 }
 
-#if defined( __CL_LONG2__ )
+/// Construct a 4-D long vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_long4 long4(cl_long2 a)
 {
     cl_long4 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
-#if defined( __CL_LONG2__ )
+/// Construct a 4-D long vector from two 2-D vectors.
 inline cl_long4 long4(cl_long2 a0, cl_long2 a1)
 {
     cl_long4 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
+/// Construct an 8-D long vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_long8 long8(cl_long a)
 {
     cl_long8 r;
@@ -1109,6 +1585,7 @@ inline cl_long8 long8(cl_long a)
     return r;
 }
 
+/// Construct an 8-D long vector from eight elements.
 inline cl_long8 long8(cl_long a0, cl_long a1, cl_long a2, cl_long a3, cl_long a4, cl_long a5, cl_long a6, cl_long a7)
 {
     cl_long8 r;
@@ -1117,42 +1594,62 @@ inline cl_long8 long8(cl_long a0, cl_long a1, cl_long a2, cl_long a3, cl_long a4
     return r;
 }
 
-#if defined( __CL_LONG2__ )
+/// Construct an 8-D long vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_long8 long8(cl_long2 a)
 {
     cl_long8 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
-#if defined( __CL_LONG2__ )
+/// Construct an 8-D long vector from four 2-D vectors.
 inline cl_long8 long8(cl_long2 a0, cl_long2 a1, cl_long2 a2, cl_long2 a3)
 {
     cl_long8 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
-#if defined( __CL_LONG4__ )
+/// Construct an 8-D long vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_long8 long8(cl_long4 a)
 {
     cl_long8 r;
+#if defined( __CL_LONG4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_LONG4__
     return r;
 }
-#endif // __CL_LONG4__
 
-#if defined( __CL_LONG4__ )
+/// Construct an 8-D long vector from two 4-D vectors.
 inline cl_long8 long8(cl_long4 a0, cl_long4 a1)
 {
     cl_long8 r;
+#if defined( __CL_LONG4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_LONG4__
     return r;
 }
-#endif // __CL_LONG4__
 
+/// Construct a 16-D long vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_long16 long16(cl_long a)
 {
     cl_long16 r;
@@ -1163,6 +1660,7 @@ inline cl_long16 long16(cl_long a)
     return r;
 }
 
+/// Construct a 16-D long vector from sixteen elements.
 inline cl_long16 long16(cl_long a0, cl_long a1, cl_long a2, cl_long a3, cl_long a4, cl_long a5, cl_long a6, cl_long a7, cl_long a8, cl_long a9, cl_long a10, cl_long a11, cl_long a12, cl_long a13, cl_long a14, cl_long a15)
 {
     cl_long16 r;
@@ -1173,62 +1671,103 @@ inline cl_long16 long16(cl_long a0, cl_long a1, cl_long a2, cl_long a3, cl_long 
     return r;
 }
 
-#if defined( __CL_LONG2__ )
+/// Construct a 16-D long vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_long16 long16(cl_long2 a)
 {
     cl_long16 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
-#if defined( __CL_LONG2__ )
+/// Construct a 16-D long vector from eight 2-D vectors.
 inline cl_long16 long16(cl_long2 a0, cl_long2 a1, cl_long2 a2, cl_long2 a3, cl_long2 a4, cl_long2 a5, cl_long2 a6, cl_long2 a7)
 {
     cl_long16 r;
+#if defined( __CL_LONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_LONG2__
     return r;
 }
-#endif // __CL_LONG2__
 
-#if defined( __CL_LONG4__ )
+/// Construct a 16-D long vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_long16 long16(cl_long4 a)
 {
     cl_long16 r;
+#if defined( __CL_LONG4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_LONG4__
     return r;
 }
-#endif // __CL_LONG4__
 
-#if defined( __CL_LONG4__ )
+/// Construct a 16-D long vector from four 4-D vectors.
 inline cl_long16 long16(cl_long4 a0, cl_long4 a1, cl_long4 a2, cl_long4 a3)
 {
     cl_long16 r;
+#if defined( __CL_LONG4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_LONG4__
     return r;
 }
-#endif // __CL_LONG4__
 
-#if defined( __CL_LONG8__ )
+/// Construct a 16-D long vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_long16 long16(cl_long8 a)
 {
     cl_long16 r;
+#if defined( __CL_LONG8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_LONG8__
     return r;
 }
-#endif // __CL_LONG8__
 
-#if defined( __CL_LONG8__ )
+/// Construct a 16-D long vector from two 8-D vectors.
 inline cl_long16 long16(cl_long8 a0, cl_long8 a1)
 {
     cl_long16 r;
+#if defined( __CL_LONG8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_LONG8__
     return r;
 }
-#endif // __CL_LONG8__
 
+/// Construct a 2-D ulong vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ulong2 ulong2(cl_ulong a)
 {
     cl_ulong2 r;
@@ -1236,6 +1775,7 @@ inline cl_ulong2 ulong2(cl_ulong a)
     return r;
 }
 
+/// Construct a 2-D ulong vector from two elements.
 inline cl_ulong2 ulong2(cl_ulong a0, cl_ulong a1)
 {
     cl_ulong2 r;
@@ -1243,6 +1783,8 @@ inline cl_ulong2 ulong2(cl_ulong a0, cl_ulong a1)
     return r;
 }
 
+/// Construct a 4-D ulong vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ulong4 ulong4(cl_ulong a)
 {
     cl_ulong4 r;
@@ -1250,6 +1792,7 @@ inline cl_ulong4 ulong4(cl_ulong a)
     return r;
 }
 
+/// Construct a 4-D ulong vector from four elements.
 inline cl_ulong4 ulong4(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3)
 {
     cl_ulong4 r;
@@ -1257,24 +1800,33 @@ inline cl_ulong4 ulong4(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3)
     return r;
 }
 
-#if defined( __CL_ULONG2__ )
+/// Construct a 4-D ulong vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ulong4 ulong4(cl_ulong2 a)
 {
     cl_ulong4 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
-#if defined( __CL_ULONG2__ )
+/// Construct a 4-D ulong vector from two 2-D vectors.
 inline cl_ulong4 ulong4(cl_ulong2 a0, cl_ulong2 a1)
 {
     cl_ulong4 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
+/// Construct an 8-D ulong vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ulong8 ulong8(cl_ulong a)
 {
     cl_ulong8 r;
@@ -1283,6 +1835,7 @@ inline cl_ulong8 ulong8(cl_ulong a)
     return r;
 }
 
+/// Construct an 8-D ulong vector from eight elements.
 inline cl_ulong8 ulong8(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3, cl_ulong a4, cl_ulong a5, cl_ulong a6, cl_ulong a7)
 {
     cl_ulong8 r;
@@ -1291,42 +1844,62 @@ inline cl_ulong8 ulong8(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3, cl_u
     return r;
 }
 
-#if defined( __CL_ULONG2__ )
+/// Construct an 8-D ulong vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ulong8 ulong8(cl_ulong2 a)
 {
     cl_ulong8 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
-#if defined( __CL_ULONG2__ )
+/// Construct an 8-D ulong vector from four 2-D vectors.
 inline cl_ulong8 ulong8(cl_ulong2 a0, cl_ulong2 a1, cl_ulong2 a2, cl_ulong2 a3)
 {
     cl_ulong8 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
-#if defined( __CL_ULONG4__ )
+/// Construct an 8-D ulong vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_ulong8 ulong8(cl_ulong4 a)
 {
     cl_ulong8 r;
+#if defined( __CL_ULONG4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_ULONG4__
     return r;
 }
-#endif // __CL_ULONG4__
 
-#if defined( __CL_ULONG4__ )
+/// Construct an 8-D ulong vector from two 4-D vectors.
 inline cl_ulong8 ulong8(cl_ulong4 a0, cl_ulong4 a1)
 {
     cl_ulong8 r;
+#if defined( __CL_ULONG4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_ULONG4__
     return r;
 }
-#endif // __CL_ULONG4__
 
+/// Construct a 16-D ulong vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_ulong16 ulong16(cl_ulong a)
 {
     cl_ulong16 r;
@@ -1337,6 +1910,7 @@ inline cl_ulong16 ulong16(cl_ulong a)
     return r;
 }
 
+/// Construct a 16-D ulong vector from sixteen elements.
 inline cl_ulong16 ulong16(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3, cl_ulong a4, cl_ulong a5, cl_ulong a6, cl_ulong a7, cl_ulong a8, cl_ulong a9, cl_ulong a10, cl_ulong a11, cl_ulong a12, cl_ulong a13, cl_ulong a14, cl_ulong a15)
 {
     cl_ulong16 r;
@@ -1347,62 +1921,103 @@ inline cl_ulong16 ulong16(cl_ulong a0, cl_ulong a1, cl_ulong a2, cl_ulong a3, cl
     return r;
 }
 
-#if defined( __CL_ULONG2__ )
+/// Construct a 16-D ulong vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_ulong16 ulong16(cl_ulong2 a)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
-#if defined( __CL_ULONG2__ )
+/// Construct a 16-D ulong vector from eight 2-D vectors.
 inline cl_ulong16 ulong16(cl_ulong2 a0, cl_ulong2 a1, cl_ulong2 a2, cl_ulong2 a3, cl_ulong2 a4, cl_ulong2 a5, cl_ulong2 a6, cl_ulong2 a7)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_ULONG2__
     return r;
 }
-#endif // __CL_ULONG2__
 
-#if defined( __CL_ULONG4__ )
+/// Construct a 16-D ulong vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_ulong16 ulong16(cl_ulong4 a)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_ULONG4__
     return r;
 }
-#endif // __CL_ULONG4__
 
-#if defined( __CL_ULONG4__ )
+/// Construct a 16-D ulong vector from four 4-D vectors.
 inline cl_ulong16 ulong16(cl_ulong4 a0, cl_ulong4 a1, cl_ulong4 a2, cl_ulong4 a3)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_ULONG4__
     return r;
 }
-#endif // __CL_ULONG4__
 
-#if defined( __CL_ULONG8__ )
+/// Construct a 16-D ulong vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_ulong16 ulong16(cl_ulong8 a)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_ULONG8__
     return r;
 }
-#endif // __CL_ULONG8__
 
-#if defined( __CL_ULONG8__ )
+/// Construct a 16-D ulong vector from two 8-D vectors.
 inline cl_ulong16 ulong16(cl_ulong8 a0, cl_ulong8 a1)
 {
     cl_ulong16 r;
+#if defined( __CL_ULONG8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_ULONG8__
     return r;
 }
-#endif // __CL_ULONG8__
 
+/// Construct a 2-D float vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_float2 float2(cl_float a)
 {
     cl_float2 r;
@@ -1410,6 +2025,7 @@ inline cl_float2 float2(cl_float a)
     return r;
 }
 
+/// Construct a 2-D float vector from two elements.
 inline cl_float2 float2(cl_float a0, cl_float a1)
 {
     cl_float2 r;
@@ -1417,6 +2033,8 @@ inline cl_float2 float2(cl_float a0, cl_float a1)
     return r;
 }
 
+/// Construct a 4-D float vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_float4 float4(cl_float a)
 {
     cl_float4 r;
@@ -1424,6 +2042,7 @@ inline cl_float4 float4(cl_float a)
     return r;
 }
 
+/// Construct a 4-D float vector from four elements.
 inline cl_float4 float4(cl_float a0, cl_float a1, cl_float a2, cl_float a3)
 {
     cl_float4 r;
@@ -1431,24 +2050,33 @@ inline cl_float4 float4(cl_float a0, cl_float a1, cl_float a2, cl_float a3)
     return r;
 }
 
-#if defined( __CL_FLOAT2__ )
+/// Construct a 4-D float vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_float4 float4(cl_float2 a)
 {
     cl_float4 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
-#if defined( __CL_FLOAT2__ )
+/// Construct a 4-D float vector from two 2-D vectors.
 inline cl_float4 float4(cl_float2 a0, cl_float2 a1)
 {
     cl_float4 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
+/// Construct an 8-D float vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_float8 float8(cl_float a)
 {
     cl_float8 r;
@@ -1457,6 +2085,7 @@ inline cl_float8 float8(cl_float a)
     return r;
 }
 
+/// Construct an 8-D float vector from eight elements.
 inline cl_float8 float8(cl_float a0, cl_float a1, cl_float a2, cl_float a3, cl_float a4, cl_float a5, cl_float a6, cl_float a7)
 {
     cl_float8 r;
@@ -1465,42 +2094,62 @@ inline cl_float8 float8(cl_float a0, cl_float a1, cl_float a2, cl_float a3, cl_f
     return r;
 }
 
-#if defined( __CL_FLOAT2__ )
+/// Construct an 8-D float vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_float8 float8(cl_float2 a)
 {
     cl_float8 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
-#if defined( __CL_FLOAT2__ )
+/// Construct an 8-D float vector from four 2-D vectors.
 inline cl_float8 float8(cl_float2 a0, cl_float2 a1, cl_float2 a2, cl_float2 a3)
 {
     cl_float8 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
-#if defined( __CL_FLOAT4__ )
+/// Construct an 8-D float vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_float8 float8(cl_float4 a)
 {
     cl_float8 r;
+#if defined( __CL_FLOAT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_FLOAT4__
     return r;
 }
-#endif // __CL_FLOAT4__
 
-#if defined( __CL_FLOAT4__ )
+/// Construct an 8-D float vector from two 4-D vectors.
 inline cl_float8 float8(cl_float4 a0, cl_float4 a1)
 {
     cl_float8 r;
+#if defined( __CL_FLOAT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_FLOAT4__
     return r;
 }
-#endif // __CL_FLOAT4__
 
+/// Construct a 16-D float vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_float16 float16(cl_float a)
 {
     cl_float16 r;
@@ -1511,6 +2160,7 @@ inline cl_float16 float16(cl_float a)
     return r;
 }
 
+/// Construct a 16-D float vector from sixteen elements.
 inline cl_float16 float16(cl_float a0, cl_float a1, cl_float a2, cl_float a3, cl_float a4, cl_float a5, cl_float a6, cl_float a7, cl_float a8, cl_float a9, cl_float a10, cl_float a11, cl_float a12, cl_float a13, cl_float a14, cl_float a15)
 {
     cl_float16 r;
@@ -1521,62 +2171,103 @@ inline cl_float16 float16(cl_float a0, cl_float a1, cl_float a2, cl_float a3, cl
     return r;
 }
 
-#if defined( __CL_FLOAT2__ )
+/// Construct a 16-D float vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_float16 float16(cl_float2 a)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
-#if defined( __CL_FLOAT2__ )
+/// Construct a 16-D float vector from eight 2-D vectors.
 inline cl_float16 float16(cl_float2 a0, cl_float2 a1, cl_float2 a2, cl_float2 a3, cl_float2 a4, cl_float2 a5, cl_float2 a6, cl_float2 a7)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_FLOAT2__
     return r;
 }
-#endif // __CL_FLOAT2__
 
-#if defined( __CL_FLOAT4__ )
+/// Construct a 16-D float vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_float16 float16(cl_float4 a)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_FLOAT4__
     return r;
 }
-#endif // __CL_FLOAT4__
 
-#if defined( __CL_FLOAT4__ )
+/// Construct a 16-D float vector from four 4-D vectors.
 inline cl_float16 float16(cl_float4 a0, cl_float4 a1, cl_float4 a2, cl_float4 a3)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_FLOAT4__
     return r;
 }
-#endif // __CL_FLOAT4__
 
-#if defined( __CL_FLOAT8__ )
+/// Construct a 16-D float vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_float16 float16(cl_float8 a)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_FLOAT8__
     return r;
 }
-#endif // __CL_FLOAT8__
 
-#if defined( __CL_FLOAT8__ )
+/// Construct a 16-D float vector from two 8-D vectors.
 inline cl_float16 float16(cl_float8 a0, cl_float8 a1)
 {
     cl_float16 r;
+#if defined( __CL_FLOAT8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_FLOAT8__
     return r;
 }
-#endif // __CL_FLOAT8__
 
+/// Construct a 2-D double vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_double2 double2(cl_double a)
 {
     cl_double2 r;
@@ -1584,6 +2275,7 @@ inline cl_double2 double2(cl_double a)
     return r;
 }
 
+/// Construct a 2-D double vector from two elements.
 inline cl_double2 double2(cl_double a0, cl_double a1)
 {
     cl_double2 r;
@@ -1591,6 +2283,8 @@ inline cl_double2 double2(cl_double a0, cl_double a1)
     return r;
 }
 
+/// Construct a 4-D double vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_double4 double4(cl_double a)
 {
     cl_double4 r;
@@ -1598,6 +2292,7 @@ inline cl_double4 double4(cl_double a)
     return r;
 }
 
+/// Construct a 4-D double vector from four elements.
 inline cl_double4 double4(cl_double a0, cl_double a1, cl_double a2, cl_double a3)
 {
     cl_double4 r;
@@ -1605,24 +2300,33 @@ inline cl_double4 double4(cl_double a0, cl_double a1, cl_double a2, cl_double a3
     return r;
 }
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct a 4-D double vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_double4 double4(cl_double2 a)
 {
     cl_double4 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct a 4-D double vector from two 2-D vectors.
 inline cl_double4 double4(cl_double2 a0, cl_double2 a1)
 {
     cl_double4 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
+/// Construct an 8-D double vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_double8 double8(cl_double a)
 {
     cl_double8 r;
@@ -1631,6 +2335,7 @@ inline cl_double8 double8(cl_double a)
     return r;
 }
 
+/// Construct an 8-D double vector from eight elements.
 inline cl_double8 double8(cl_double a0, cl_double a1, cl_double a2, cl_double a3, cl_double a4, cl_double a5, cl_double a6, cl_double a7)
 {
     cl_double8 r;
@@ -1639,42 +2344,62 @@ inline cl_double8 double8(cl_double a0, cl_double a1, cl_double a2, cl_double a3
     return r;
 }
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct an 8-D double vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_double8 double8(cl_double2 a)
 {
     cl_double8 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct an 8-D double vector from four 2-D vectors.
 inline cl_double8 double8(cl_double2 a0, cl_double2 a1, cl_double2 a2, cl_double2 a3)
 {
     cl_double8 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
-#if defined( __CL_DOUBLE4__ )
+/// Construct an 8-D double vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_double8 double8(cl_double4 a)
 {
     cl_double8 r;
+#if defined( __CL_DOUBLE4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+#endif // __CL_DOUBLE4__
     return r;
 }
-#endif // __CL_DOUBLE4__
 
-#if defined( __CL_DOUBLE4__ )
+/// Construct an 8-D double vector from two 4-D vectors.
 inline cl_double8 double8(cl_double4 a0, cl_double4 a1)
 {
     cl_double8 r;
+#if defined( __CL_DOUBLE4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+#endif // __CL_DOUBLE4__
     return r;
 }
-#endif // __CL_DOUBLE4__
 
+/// Construct a 16-D double vector from a scalar value.
+/// The scalar value will be replicated to all components of the returned vector.
 inline cl_double16 double16(cl_double a)
 {
     cl_double16 r;
@@ -1685,6 +2410,7 @@ inline cl_double16 double16(cl_double a)
     return r;
 }
 
+/// Construct a 16-D double vector from sixteen elements.
 inline cl_double16 double16(cl_double a0, cl_double a1, cl_double a2, cl_double a3, cl_double a4, cl_double a5, cl_double a6, cl_double a7, cl_double a8, cl_double a9, cl_double a10, cl_double a11, cl_double a12, cl_double a13, cl_double a14, cl_double a15)
 {
     cl_double16 r;
@@ -1695,61 +2421,100 @@ inline cl_double16 double16(cl_double a0, cl_double a1, cl_double a2, cl_double 
     return r;
 }
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct a 16-D double vector from a 2-D vector.
+/// This 2-D vector will be replicated to all components of the returned vector.
 inline cl_double16 double16(cl_double2 a)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a.v2; r.v2[1] = a.v2; r.v2[2] = a.v2; r.v2[3] = a.v2;
     r.v2[4] = a.v2; r.v2[5] = a.v2; r.v2[6] = a.v2; r.v2[7] = a.v2;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[0]; r.s[3] = a.s[1];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[0]; r.s[7] = a.s[1];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[0]; r.s[11] = a.s[1];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[0]; r.s[15] = a.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
-#if defined( __CL_DOUBLE2__ )
+/// Construct a 16-D double vector from eight 2-D vectors.
 inline cl_double16 double16(cl_double2 a0, cl_double2 a1, cl_double2 a2, cl_double2 a3, cl_double2 a4, cl_double2 a5, cl_double2 a6, cl_double2 a7)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE2__ )
     r.v2[0] = a0.v2; r.v2[1] = a1.v2; r.v2[2] = a2.v2; r.v2[3] = a3.v2;
     r.v2[4] = a4.v2; r.v2[5] = a5.v2; r.v2[6] = a6.v2; r.v2[7] = a7.v2;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a1.s[0]; r.s[3] = a1.s[1];
+    r.s[4] = a2.s[0]; r.s[5] = a2.s[1]; r.s[6] = a3.s[0]; r.s[7] = a3.s[1];
+    r.s[8] = a4.s[0]; r.s[9] = a4.s[1]; r.s[10] = a5.s[0]; r.s[11] = a5.s[1];
+    r.s[12] = a6.s[0]; r.s[13] = a6.s[1]; r.s[14] = a7.s[0]; r.s[15] = a7.s[1];
+#endif // __CL_DOUBLE2__
     return r;
 }
-#endif // __CL_DOUBLE2__
 
-#if defined( __CL_DOUBLE4__ )
+/// Construct a 16-D double vector from a 4-D vector.
+/// This 4-D vector will be replicated to all components of the returned vector.
 inline cl_double16 double16(cl_double4 a)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE4__ )
     r.v4[0] = a.v4; r.v4[1] = a.v4; r.v4[2] = a.v4; r.v4[3] = a.v4;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[0]; r.s[5] = a.s[1]; r.s[6] = a.s[2]; r.s[7] = a.s[3];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[0]; r.s[13] = a.s[1]; r.s[14] = a.s[2]; r.s[15] = a.s[3];
+#endif // __CL_DOUBLE4__
     return r;
 }
-#endif // __CL_DOUBLE4__
 
-#if defined( __CL_DOUBLE4__ )
+/// Construct a 16-D double vector from four 4-D vectors.
 inline cl_double16 double16(cl_double4 a0, cl_double4 a1, cl_double4 a2, cl_double4 a3)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE4__ )
     r.v4[0] = a0.v4; r.v4[1] = a1.v4; r.v4[2] = a2.v4; r.v4[3] = a3.v4;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a1.s[0]; r.s[5] = a1.s[1]; r.s[6] = a1.s[2]; r.s[7] = a1.s[3];
+    r.s[8] = a2.s[0]; r.s[9] = a2.s[1]; r.s[10] = a2.s[2]; r.s[11] = a2.s[3];
+    r.s[12] = a3.s[0]; r.s[13] = a3.s[1]; r.s[14] = a3.s[2]; r.s[15] = a3.s[3];
+#endif // __CL_DOUBLE4__
     return r;
 }
-#endif // __CL_DOUBLE4__
 
-#if defined( __CL_DOUBLE8__ )
+/// Construct a 16-D double vector from an 8-D vector.
+/// This 8-D vector will be replicated to all components of the returned vector.
 inline cl_double16 double16(cl_double8 a)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE8__ )
     r.v8[0] = a.v8; r.v8[1] = a.v8;
+#else
+    r.s[0] = a.s[0]; r.s[1] = a.s[1]; r.s[2] = a.s[2]; r.s[3] = a.s[3];
+    r.s[4] = a.s[4]; r.s[5] = a.s[5]; r.s[6] = a.s[6]; r.s[7] = a.s[7];
+    r.s[8] = a.s[0]; r.s[9] = a.s[1]; r.s[10] = a.s[2]; r.s[11] = a.s[3];
+    r.s[12] = a.s[4]; r.s[13] = a.s[5]; r.s[14] = a.s[6]; r.s[15] = a.s[7];
+#endif // __CL_DOUBLE8__
     return r;
 }
-#endif // __CL_DOUBLE8__
 
-#if defined( __CL_DOUBLE8__ )
+/// Construct a 16-D double vector from two 8-D vectors.
 inline cl_double16 double16(cl_double8 a0, cl_double8 a1)
 {
     cl_double16 r;
+#if defined( __CL_DOUBLE8__ )
     r.v8[0] = a0.v8; r.v8[1] = a1.v8;
+#else
+    r.s[0] = a0.s[0]; r.s[1] = a0.s[1]; r.s[2] = a0.s[2]; r.s[3] = a0.s[3];
+    r.s[4] = a0.s[4]; r.s[5] = a0.s[5]; r.s[6] = a0.s[6]; r.s[7] = a0.s[7];
+    r.s[8] = a1.s[0]; r.s[9] = a1.s[1]; r.s[10] = a1.s[2]; r.s[11] = a1.s[3];
+    r.s[12] = a1.s[4]; r.s[13] = a1.s[5]; r.s[14] = a1.s[6]; r.s[15] = a1.s[7];
+#endif // __CL_DOUBLE8__
     return r;
 }
-#endif // __CL_DOUBLE8__
 
 } // namespace clpp
 

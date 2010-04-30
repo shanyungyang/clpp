@@ -1,3 +1,8 @@
+//          Copyright Shan-Yung Yang 2010.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef CLPP_DEVICE_HPP
 #define CLPP_DEVICE_HPP
 
@@ -19,34 +24,19 @@ class Device {
         }
 
         /// Get the device name.
-        std::string name() const
-        {
-            return getInfo<std::string>(CL_DEVICE_NAME);
-        }
+        std::string name() const;
 
         /// Get the vendor of the device.
-        std::string vendor() const
-        {
-            return getInfo<std::string>(CL_DEVICE_VENDOR);
-        }
+        std::string vendor() const;
 
         /// Get the version string of the device.
-        std::string version() const
-        {
-            return getInfo<std::string>(CL_DEVICE_VERSION);
-        }
+        std::string version() const;
 
         /// Get the profile string of the device.
-        std::string profile() const
-        {
-            return getInfo<std::string>(CL_DEVICE_PROFILE);
-        }
+        std::string profile() const;
 
         /// Get the extension string of the device.
-        std::string extensions() const
-        {
-            return getInfo<std::string>(CL_DEVICE_EXTENSIONS);
-        }
+        std::string extensions() const;
 
         /// Get the device type.
         cl_device_type type() const
@@ -165,21 +155,47 @@ class Device {
             return result;
         }
 
-        /// Get device information string.
-        template <> std::string getInfo<std::string>(cl_device_info info) const
-        {
-            size_t len;
-            cl_int err = clGetDeviceInfo(my_id, info, 0, NULL, &len);
-            CLPP_CHECK_ERROR(err);
-            std::string buf(len, 0);
-            err = clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
-            CLPP_CHECK_ERROR(err);
-            return buf;
-        }
-
     private:
         cl_device_id my_id;
 }; // class Device
+
+// GCC gives an error if we put this explicit specialization inside the class definition.
+/// Get device information string.
+template <> std::string Device::getInfo<std::string>(cl_device_info info) const
+{
+    size_t len;
+    cl_int err = clGetDeviceInfo(my_id, info, 0, NULL, &len);
+    CLPP_CHECK_ERROR(err);
+    std::string buf(len, 0);
+    err = clGetDeviceInfo(my_id, info, len, &buf[0], NULL);
+    CLPP_CHECK_ERROR(err);
+    return buf;
+}
+
+inline std::string Device::name() const
+{
+    return getInfo<std::string>(CL_DEVICE_NAME);
+}
+
+inline std::string Device::vendor() const
+{
+    return getInfo<std::string>(CL_DEVICE_VENDOR);
+}
+
+inline std::string Device::version() const
+{
+    return getInfo<std::string>(CL_DEVICE_VERSION);
+}
+
+inline std::string Device::profile() const
+{
+    return getInfo<std::string>(CL_DEVICE_PROFILE);
+}
+
+inline std::string Device::extensions() const
+{
+    return getInfo<std::string>(CL_DEVICE_EXTENSIONS);
+}
 
 
 } // namespace clpp

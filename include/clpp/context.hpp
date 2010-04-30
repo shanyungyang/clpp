@@ -1,3 +1,8 @@
+//          Copyright Shan-Yung Yang 2010.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef CLPP_CONTEXT_HPP
 #define CLPP_CONTEXT_HPP
 
@@ -14,11 +19,22 @@
 namespace clpp {
 
 /// The OpenCL context.
+/** By the definition from OpenCL specification, context is the environment
+    within which the kernels execute and the domain in which synchronization
+    and memory management is defined. The context includes a set of devices,
+    the memory accessible to those devices, the corresponding memory properties
+    and one or more command-queues used to schedule execution of a kernel(s)
+    or operations on memory objects.
+ */
 class Context {
     public:
         /// Construct the context by the specified platform and device type.
-        /// By default, the first available platform on this system is used,
-        /// and the default device type is CL_DEVICE_TYPE_DEFAULT.
+        /** 
+            \param platform The specified platform. By default, the first
+                            available platform on the system is used.
+            \param type     The type of devices to be used in the platform. By 
+                            default, CL_DEVICE_TYPE_DEFAULT is used.
+         */
         Context(Platform platform = Platform(), cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
             : my_devices(platform, type)
         {
@@ -43,7 +59,7 @@ class Context {
             return *my_resource;
         }
 
-        /// Get the i'th device object associated with this context.
+        /// Get the \var i 'th device object associated with this context.
         Device device(size_t i = 0) const
         {
             return my_devices[i];
@@ -65,7 +81,7 @@ class Context {
         template <typename T> Buffer<T> createBuffer(size_t size, cl_mem_flags flags = CL_MEM_READ_WRITE, T* ptr = NULL)
         {
             cl_int err = 0;
-            cl_mem mem = clCreateBuffer(context, flags, size*sizeof(T), ptr, &err);
+            cl_mem mem = clCreateBuffer(id(), flags, size*sizeof(T), ptr, &err);
             CLPP_CHECK_ERROR(err);
             return Buffer<T>(mem);
         }
@@ -91,18 +107,6 @@ class Context {
             fin.read(&src[0], src.size());
             return readProgramSource(&src[0], options);
         }
-
-        /*
-        void checkProgram(Program p)
-        {
-            for(size_t i = 0; i < getNumberOfDevices(); ++i){
-                Device d = device(i);
-                if(p.status(d) != CL_BUILD_SUCCESS)
-                    throw std::runtime_error("CL_BUILD_PROGRAM_FAILURE\n" + p.getBuildLog(d));
-            }
-        }
-        */
-
 
     private:
         void initByPlatform(cl_platform_id platform, cl_device_type type)
