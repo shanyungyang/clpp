@@ -13,6 +13,7 @@
 #include "device.hpp"
 #include "commandqueue.hpp"
 #include "buffer.hpp"
+#include "image.hpp"
 #include "program.hpp"
 #include "error.hpp"
 
@@ -42,43 +43,72 @@ class Context {
         }
 
         /// Construct the context by a list of devices.
+        /**
+            \param device_list  The list of devices to be used in this context.
+         */
         Context(DeviceList device_list) : my_devices(device_list)
         {
             initByDevices();
         }
 
         /// Construct the context by a specific device.
+        /**
+            \param device   The device to be used in this context.
+         */
         Context(Device device) : my_devices(device)
         {
             initByDevices();
         }
 
         /// Get the cl_context object created by OpenCL API.
+        /**
+            \return     The \c cl_context object created by OpenCL API.
+         */
         cl_context id() const
         {
             return *my_resource;
         }
 
-        /// Get the \var i 'th device object associated with this context.
-        Device device(size_t i = 0) const
+        /// Get the list of devices associated with this context.
+        /**
+            \return     The \c DeviceList object containing all devices
+                        associated with this context.
+         */
+        const DeviceList& devices() const
         {
-            return my_devices[i];
+            return my_devices;
         }
 
-        /// Get the number of devices associated with this context.
-        size_t getNumberOfDevices() const
-        {
-            return my_devices.size();
-        }
+        /// Get the specific command queue associated with this context.
+        /** If not specified, the first command queue will be returned.
 
-        /// Get the i'th command queue associated with this context.
+            \param i    The number if specified command queue.
+
+            \return     The \a i 'th command queue object in this context.
+         */
         CommandQueue& queue(size_t i = 0)
         {
             return my_queues[i];
         }
 
         /// Create a buffer object.
-        template <typename T> Buffer<T> createBuffer(size_t size, cl_mem_flags flags = CL_MEM_READ_WRITE, T* ptr = NULL)
+        /**
+            \tparam T       The type of element in this buffer object.
+            \param size     Number of elements in this buffer object.
+            \param flags    A bit-field that is used to specify allocation and
+                            usage information such as the memory arena that
+                            should be used to allocate the buffer object and
+                            how it will be used.
+            \param ptr      A pointer to the buffer data that may already be
+                            allocated by the application. The buffer pointed
+                            by \a host_ptr must contain equal or more than
+                            \a size elements.
+
+            \return         A buffer object which has \c size elements in type
+                            \c T.
+         */
+        template <typename T>
+        Buffer<T> createBuffer(size_t size, cl_mem_flags flags = CL_MEM_READ_WRITE, T* ptr = NULL)
         {
             cl_int err = 0;
             cl_mem mem = clCreateBuffer(id(), flags, size*sizeof(T), ptr, &err);
@@ -86,7 +116,40 @@ class Context {
             return Buffer<T>(mem);
         }
 
+        /// Create a 2D image object.
+        template <cl_channel_order O, cl_channel_type T>
+        Image2D createImage(size2 size, cl_mem_flags flags = CL_MEM_READ_WRITE, typename ChannelType<T>::Type* host_ptr = NULL, size_t pitch = 0)
+        {
+            cl_image_format format;
+            format.image_channel_order = O;
+            format.image_channel_data_type = T;
+            cl_int err;
+            cl_mem mem = clCreateImage2D(id(), flags, &format, size.s[0], size.s[1], pitch, host_ptr, err);
+            CLPP_CHECK_ERROR(err);
+            return Image2D(mem);
+        }
+
+        /// Create a 3D image object.
+        template <cl_channel_order O, cl_channel_type T>
+        Image2D createImage(size3 size, cl_mem_flags flags = CL_MEM_READ_WRITE, typename ChannelType<T>::Type* host_ptr = NULL, size_t row_pitch = 0, size_t slice_pitch = 0)
+        {
+            cl_image_format format;
+            format.image_channel_order = O;
+            format.image_channel_data_type = T;
+            cl_int err;
+            cl_mem mem = clCreateImage3D(id(), flags, &format, size.s[0], size.s[1], size.s[2], row_pitch, slice_pitch, host_ptr, err);
+            CLPP_CHECK_ERROR(err);
+            return Image3D(mem);
+        }
+
         /// Create a program object.
+        /**
+            \param source   The program source code. It must be null-terminated.
+            \param options  Additional compiler options for this program.
+
+            \return         The program object. The program is automatically
+                            built for all devices associated with the context.
+         */
         Program readProgramSource(const char* source, const char* options = NULL)
         {
             cl_int err;
@@ -98,6 +161,14 @@ class Context {
         }
 
         /// Create a program object.
+        /** This function create a program object from a source file.
+
+            \param filename Name of the source file.
+            \param options  Additional compiler options for this program.
+
+            \return         The program object. The program is automatically
+                            built for all devices associated with the context.
+         */
         Program readProgramSourceFile(const char* filename, const char* options = NULL)
         {
             std::ifstream fin(filename, std::ios::binary);

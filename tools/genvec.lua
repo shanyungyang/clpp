@@ -151,7 +151,6 @@ print(" * DO NOT MODIFY THIS FILE DIRECTLY.")
 print(" * Please edit genvec.lua and re-generate this file for modification.")
 print(" */\n")
 
-print("#include \"size.hpp\"\n")
 print("namespace clpp {\n")
 
 local TYPES = {

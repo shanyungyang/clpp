@@ -12,21 +12,36 @@
 
 namespace clpp {
 
+/// The kernel object.
+/** A kernel is a function declared in a program and executed on an OpenCL
+    device. A kernel is identified by the \c __kernel or \c kernel qualifier
+    applied to any function defined in a program.
+ */
 class Kernel {
     public:
+        /// Construct a kernel object.
+        /** Instead of using this constructor directly, please use
+            Program::kernel to construct a kernel object.
+         */
         Kernel(cl_kernel id) : my_resource(id) {}
 
+        /// Get the \c cl_kernel object created by OpenCL API.
+        /**
+            \return     the \c cl_kernel object created by OpenCL API.
+         */
         cl_kernel id() const
         {
             return *my_resource;
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0>
         void setArgs(const T0& v0)
         {
             setArg(0, v0);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1>
         void setArgs(const T0& v0, const T1& v1)
         {
@@ -34,6 +49,7 @@ class Kernel {
             setArgs(v0);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2>
         void setArgs(const T0& v0, const T1& v1, const T2& v2)
         {
@@ -41,6 +57,7 @@ class Kernel {
             setArgs(v0, v1);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2, typename T3>
         void setArgs(const T0& v0, const T1& v1, const T2& v2, const T3& v3)
         {
@@ -48,6 +65,7 @@ class Kernel {
             setArgs(v0, v1, v2);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2, typename T3, typename T4>
         void setArgs(const T0& v0, const T1& v1, const T2& v2, const T3& v3, const T4& v4)
         {
@@ -55,6 +73,7 @@ class Kernel {
             setArgs(v0, v1, v2, v3);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
         void setArgs(const T0& v0, const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5)
         {
@@ -62,6 +81,7 @@ class Kernel {
             setArgs(v0, v1, v2, v3, v4);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
         void setArgs(const T0& v0, const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6)
         {
@@ -69,6 +89,7 @@ class Kernel {
             setArgs(v0, v1, v2, v3, v4, v5);
         }
 
+        /// Set arguments of this kernel function.
         template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
         void setArgs(const T0& v0, const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7)
         {
@@ -76,15 +97,25 @@ class Kernel {
             setArgs(v0, v1, v2, v3, v4, v5, v6);
         }
 
+        /// Set a specific argument of this kernel function.
+        /** 
+            \tparam T           The type of the argument.
+            \param arg_index    The index of specified argument.
+            \param value        The argument value.
+         */
         template <typename T> void setArg(cl_uint arg_index, const T& value)
         {
             cl_int err = clSetKernelArg(id(), arg_index, sizeof(T), &value);
             CLPP_CHECK_ERROR(err);
         }
 
-        template <typename T> void setArg(cl_uint arg_index, const Buffer<T>& buffer)
+        /// Set arguments of this kernel function.
+        /** This function is a specialized version which is used for
+            buffer objects.
+         */
+        template<typename T> void setArg(cl_uint arg_index, const Buffer<T>& memory)
         {
-            cl_mem mem = buffer.id();
+            cl_mem mem = memory.id();
             cl_int err = clSetKernelArg(id(), arg_index, sizeof(cl_mem), &mem);
             CLPP_CHECK_ERROR(err);
         }

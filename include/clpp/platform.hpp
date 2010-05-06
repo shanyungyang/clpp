@@ -17,6 +17,11 @@
 namespace clpp {
 
 /// The OpenCL platform.
+/**
+    Platform is the host plus a collection of devices managed by the OpenCL
+    framework that allow an application to share resources and execute kernels
+    on devices in the platform.
+ */
 class Platform {
     public:
         /// Construct the object as the first available platform on the system. 
@@ -30,15 +35,27 @@ class Platform {
         }
 
         /// Construct the object by the specified platform ID.
+        /** 
+            \param id   The platform ID obtained by OpenCL API.
+         */
         Platform(cl_platform_id id) : my_id(id) {}
 
         /// Get the platform ID.
+        /**
+            \return     The platform ID used in OpenCL API.
+         */
         cl_platform_id id() const
         {
             return my_id;
         }
 
         /// Get specific information about the platform.
+        /**
+            \param info An enumeration constant that identifies the platform
+                        information being queried.
+
+            \return     The specified information, in std::string.
+         */
         std::string getInfo(cl_platform_info info) const
         {
             size_t len;
@@ -51,30 +68,52 @@ class Platform {
         }
 
         /// Get the OpenCL profile string.
+        /** This function actually calls Platform::getInfo(CL_PLATFORM_PROFILE).
+
+            \return     The profile name supported by the implementation.
+         */
         std::string profile() const
         {
             return getInfo(CL_PLATFORM_PROFILE);
         }
 
         /// Get the platform name string.
+        /** This function actually calls Platform::getInfo(CL_PLATFORM_NAME).
+
+            \return     The name string of the platform.
+         */
         std::string name() const
         {
             return getInfo(CL_PLATFORM_NAME);
         }
 
         /// Get the platform vendor string.
+        /** This function actually calls Platform::getInfo(CL_PLATFORM_VENDOR).
+
+            \return     The vendor string of the platform.
+         */
         std::string vendor() const
         {
             return getInfo(CL_PLATFORM_VENDOR);
         }
 
         /// Get the platform extension string.
+        /** This function actually calls Platform::getInfo(CL_PLATFORM_EXTENSIONS).
+
+            \return     A space-separated list of extension names (the
+                        extension names themselves do not contain any spaces)
+                        supported by the platform.
+         */
         std::string extensions() const
         {
             return getInfo(CL_PLATFORM_EXTENSIONS);
         }
 
         /// Get the platform version string.
+        /** This function actually calls Platform::getInfo(CL_PLATFORM_VERSION).
+
+            \return     The OpenCL version supported by the implementation.
+         */
         std::string version() const
         {
             return getInfo(CL_PLATFORM_VERSION);
@@ -101,13 +140,21 @@ class PlatformList {
             CLPP_CHECK_ERROR(err);
         }
 
-        /// The size of the platform list.
+        /// Get the size of the platform list.
+        /**
+            \return     Number of platforms in this list.
+         */
         size_t size() const
         {
             return my_list.size();
         }
 
-        /// The i'th platform of this list.
+        /// Get the specific platform in this list.
+        /**
+            \param i    The number of the specified platform.
+
+            \return     The \a i 'th platform in this list.
+         */
         Platform operator[](size_t i) const
         {
             return Platform(my_list[i]);
@@ -120,8 +167,14 @@ class PlatformList {
 /// A list of devices.
 class DeviceList {
     public:
-        /// Construct the device list which belong to the specified
-        /// device type, under the given platform.
+        /// Construct the device list which belong to the specified device type, under the given platform.
+        /**
+            \param platform The platform which all devices in this list should
+                            be associated with.
+            \param type     The type which all devices in this list should
+                            belong to. By default, CL_DEVICE_TYPE_DEFAULT is
+                            specified.
+         */
         DeviceList(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
         {
             size_t num = 0;
@@ -138,16 +191,26 @@ class DeviceList {
         DeviceList() {}
 
         /// Construct the device list which contains exactly one device.
+        /**
+            \param d    The device which is contained in this list.
+         */
         DeviceList(Device d) : my_list(1, d.id()) {}
 
         /// Append a device to this device list.
+        /**
+            \param d    The device to be appended.
+         */
         void append(Device d)
         {
             my_list.push_back(d.id());
         }
 
         /// Check if these devices are associated with the same platform.
-        bool checkPlatform() const
+        /**
+            \return     true if all devices in this list are associated with
+                        the same platform, and false if not.
+         */
+        bool underSamePlatform() const
         {
             if(my_list.size() == 0)
                 return false;
@@ -165,19 +228,30 @@ class DeviceList {
         }
 
         /// Get the number of devices in this list.
+        /**
+            \return Number of devices.
+         */
         size_t size() const
         {
             return my_list.size();
         }
 
-        /// Get the i'th device in this list.
+        /// Get the specific device in this list.
+        /**
+            \param i    The number of the specified device.
+            \return     The \a i 'th device in this list.
+         */
         Device operator[](size_t i) const
         {
             return Device(my_list[i]);
         }
 
-        /// Get the raw pointer to cl_device_id in this list. Clients should 
-        /// not modify the content pointed by this function.
+        /// Get the raw pointer to cl_device_id in this list.
+        /** Clients should not modify the content pointed by this function.
+         
+            \return     The pointer to the list of <tt>cl_device_id</tt>s,
+                        which can be used in OpenCL API.
+         */
         const cl_device_id* data() const
         {
             return &my_list[0];

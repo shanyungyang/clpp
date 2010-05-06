@@ -12,8 +12,6 @@
  * Please edit genvec.lua and re-generate this file for modification.
  */
 
-#include "size.hpp"
-
 namespace clpp {
 
 /// Construct a 2-D char vector from a scalar value.

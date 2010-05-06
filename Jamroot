@@ -1,3 +1,5 @@
+# If you are not using the CUDA SDK on Windows, please modify these two lines
+# to match the OpenCL include path and library path on your system.
 OPENCL_INCLUDE = "C:/CUDA/include" ;
 OPENCL_LIBPATH = "C:/CUDA/lib" ;
 

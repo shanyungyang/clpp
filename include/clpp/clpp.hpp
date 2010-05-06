@@ -7,12 +7,13 @@
 #define CLPP_HPP
 
 #include "common.hpp"
-#include "vector.hpp"
+#include "size.hpp"
 #include "platform.hpp"
 #include "device.hpp"
 #include "context.hpp"
 #include "commandqueue.hpp"
 #include "buffer.hpp"
+#include "image.hpp"
 #include "program.hpp"
 #include "kernel.hpp"
 

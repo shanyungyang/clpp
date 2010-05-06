@@ -1,0 +1,2 @@
+If you find a bug, please report it by the github issue tracker:
+http://github.com/shanyungyang/clpp/issues
