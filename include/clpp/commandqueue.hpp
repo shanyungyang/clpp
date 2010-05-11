@@ -11,6 +11,7 @@
 #include "kernel.hpp"
 #include "resource.hpp"
 #include "error.hpp"
+#include "event.hpp"
 
 namespace clpp {
 
@@ -44,7 +45,8 @@ class CommandQueue {
         void setOutOfOrder(bool mode)
         {
             cl_bool enable = mode ? CL_TRUE : CL_FALSE;
-            clSetCommandQueueProperty(id(), CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, enable, NULL);
+            cl_int err = clSetCommandQueueProperty(id(), CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, enable, NULL);
+            CLPP_CHECK_ERROR(err);
         }
 
         /// Set profiling mode of this command queue.
@@ -55,11 +57,12 @@ class CommandQueue {
         void setProfiling(bool mode)
         {
             cl_bool enable = mode ? CL_TRUE : CL_FALSE;
-            clSetCommandQueueProperty(id(), CL_QUEUE_PROFILING_ENABLE, enable, NULL);
+            cl_int err = clSetCommandQueueProperty(id(), CL_QUEUE_PROFILING_ENABLE, enable, NULL);
+            CLPP_CHECK_ERROR(err);
         }
 
         /// Enable out-of-order mode.
-        /** This function directly calls setOutOfOrder(true).
+        /** This function directly calls \c setOutOfOrder(true).
          */
         void enableOutOfOrder()
         {
@@ -67,7 +70,7 @@ class CommandQueue {
         }
 
         /// Disable out-of-order mode.
-        /** This function directly calls setOutOfOrder(true).
+        /** This function directly calls \c setOutOfOrder(true).
          */
         void disableOutOfOrder()
         {
@@ -75,7 +78,7 @@ class CommandQueue {
         }
 
         /// Enable profiling mode.
-        /** This function directly calls setProfiling(true).
+        /** This function directly calls \c setProfiling(true).
          */
         void enableProfiling()
         {
@@ -83,7 +86,7 @@ class CommandQueue {
         }
 
         /// Disable profiling mode.
-        /** This function directly calls setProfiling(false).
+        /** This function directly calls \c setProfiling(false).
          */
         void disableProfiling()
         {
@@ -128,11 +131,13 @@ class CommandQueue {
             \param blocking Indicates if the read operations are blocking or
                             non-blocking. By default, blocking read is used.
          */
-        template <typename T> void copy(const Buffer<T>& buffer, T* ptr, cl_bool blocking = CL_TRUE)
+        template <typename T> Event copy(const Buffer<T>& buffer, T* ptr, cl_bool blocking = CL_TRUE)
         {
+            cl_event event;
             size_t cb = sizeof(T) * buffer.size();
-            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, NULL);
+            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Copy a range of data from a buffer object to a host memory chunk.
@@ -144,10 +149,12 @@ class CommandQueue {
             \param blocking Indicates if the read operations are blocking or
                             non-blocking. By default, blocking read is used.
          */
-        template <typename T> void copy(const Buffer<T>& buffer, size_t offset, size_t count, T* ptr, cl_bool blocking = CL_TRUE)
+        template <typename T> Event copy(const Buffer<T>& buffer, size_t offset, size_t count, T* ptr, cl_bool blocking = CL_TRUE)
         {
-            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, NULL);
+            cl_event event;
+            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Copy data from a host memory chunk to a buffer object.
@@ -157,11 +164,13 @@ class CommandQueue {
             \param blocking Indicates if the write operations are blocking or
                             non-blocking. By default, blocking write is used.
          */
-        template <typename T> void copy(const T* ptr, const Buffer<T>& buffer, cl_bool blocking = CL_TRUE)
+        template <typename T> Event copy(const T* ptr, const Buffer<T>& buffer, cl_bool blocking = CL_TRUE)
         {
+            cl_event event;
             size_t cb = sizeof(T) * buffer.size();
-            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, NULL);
+            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Copy data from a host memory chunk to a range in a buffer object.
@@ -173,10 +182,12 @@ class CommandQueue {
             \param blocking Indicates if the write operations are blocking or
                             non-blocking. By default, blocking write is used.
          */
-        template <typename T> void copy(const T* ptr, const Buffer<T>& buffer, size_t offset, size_t count, cl_bool blocking = CL_TRUE)
+        template <typename T> Event copy(const T* ptr, const Buffer<T>& buffer, size_t offset, size_t count, cl_bool blocking = CL_TRUE)
         {
-            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, NULL);
+            cl_event event;
+            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Execute the kernel function.
@@ -189,14 +200,16 @@ class CommandQueue {
                                 If \a local_size is 0, an appropriate number
                                 is determined by the OpenCL implementation.
          */
-        void exec(Kernel k, size_t global_size, size_t local_size = 0)
+        Event exec(Kernel k, size_t global_size, size_t local_size = 0)
         {
+            cl_event event;
             cl_int err;
             if(local_size == 0)
-                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, NULL, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, NULL, 0, NULL, &event);
             else
-                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, &local_size, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, &local_size, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Execute the kernel function.
@@ -211,14 +224,16 @@ class CommandQueue {
                                 appropriate number is determined by the OpenCL
                                 implementation.
          */
-        void exec(Kernel k, size2 global_size, size2 local_size = size2(0))
+        Event exec(Kernel k, size2 global_size, size2 local_size = size2(0))
         {
+            cl_event event;
             cl_int err;
             if(local_size.s[0] == 0 || local_size.s[1] == 0)
-                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, NULL, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, NULL, 0, NULL, &event);
             else
-                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, local_size.s, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, local_size.s, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
         /// Execute the kernel function.
@@ -233,14 +248,16 @@ class CommandQueue {
                                 appropriate number is determined by the OpenCL
                                 implementation.
          */
-        void exec(Kernel k, size3 global_size, size3 local_size = size3(0))
+        Event exec(Kernel k, size3 global_size, size3 local_size = size3(0))
         {
+            cl_event event;
             cl_int err;
             if(local_size.s[0] == 0 || local_size.s[1] == 0 || local_size.s[2] == 0)
-                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, NULL, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, NULL, 0, NULL, &event);
             else
-                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, local_size.s, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, local_size.s, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
+            return Event(event);
         }
 
     private:

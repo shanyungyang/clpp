@@ -42,6 +42,12 @@ template <> struct ResourcePolicy<cl_kernel> {
     static void release(cl_kernel h) { clReleaseKernel(h); }
 }; // struct ResourcePolicy<cl_kernel>
 
+template <> struct ResourcePolicy<cl_event> {
+    static cl_event null() { return 0; }
+    static void retain(cl_event h) { clRetainEvent(h); }
+    static void release(cl_event h) { clReleaseEvent(h); }
+}; // struct ResourcePolicy<cl_event>
+
 template <typename Handle> class Resource {
     public:
         typedef ResourcePolicy<Handle> Policy;

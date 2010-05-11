@@ -1,2 +1,3 @@
 unit-test list-devices : list-devices.cpp /clpp//OpenCL ;
 unit-test example : example.cpp /clpp//OpenCL ;
+unit-test event : event.cpp /clpp//OpenCL ;
