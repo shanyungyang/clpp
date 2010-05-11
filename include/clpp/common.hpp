@@ -74,7 +74,7 @@
      
             // Read the output back to host memory.
             cl_int data[1024];
-            q.read(output, data);
+            q.copy(output, data);
      
             // check the answer
             cout << "Checking the answer..." << flush;

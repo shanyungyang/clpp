@@ -29,14 +29,26 @@ namespace clpp {
  */
 class Context {
     public:
-        /// Construct the context by the specified platform and device type.
+        /// Construct the context from the specified device type.
+        /** This constructor initialize the context from the first available
+            platfrom on the system with the specified device type.
+
+            \param type The type of devices to be used in the first available
+                        platform. By default,CL_DEVICE_TYPE_DEFAULT is used.
+         */
+        Context(cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
+            : my_devices(Platform(), type)
+        {
+            initByDevices();
+        }
+
+        /// Construct the context from the specified platform and device type.
         /** 
-            \param platform The specified platform. By default, the first
-                            available platform on the system is used.
+            \param platform The specified platform.
             \param type     The type of devices to be used in the platform. By 
                             default, CL_DEVICE_TYPE_DEFAULT is used.
          */
-        Context(Platform platform = Platform(), cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
+        Context(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
             : my_devices(platform, type)
         {
             initByPlatform(platform.id(), type);

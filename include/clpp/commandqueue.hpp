@@ -121,65 +121,125 @@ class CommandQueue {
             CLPP_CHECK_ERROR( clEnqueueBarrier(id()) );
         }
 
-        template <typename T> void read(const Buffer<T>& buffer, T* ptr, cl_bool blocking = CL_TRUE)
+        /// Copy data from a buffer object to a host memory chunk.
+        /**
+            \param buffer   The buffer object where data are read.
+            \param ptr      The host memory chunk where data are written.
+            \param blocking Indicates if the read operations are blocking or
+                            non-blocking. By default, blocking read is used.
+         */
+        template <typename T> void copy(const Buffer<T>& buffer, T* ptr, cl_bool blocking = CL_TRUE)
         {
             size_t cb = sizeof(T) * buffer.size();
             cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        template <typename T> void read(const Buffer<T>& buffer, size_t offset, size_t cb, T* ptr, cl_bool blocking = CL_TRUE)
+        /// Copy a range of data from a buffer object to a host memory chunk.
+        /**
+            \param buffer   The buffer object where data are read.
+            \param offset   The beginning index of items to be read.
+            \param count    The number of items to be read.
+            \param ptr      The host memory chunk where data are written.
+            \param blocking Indicates if the read operations are blocking or
+                            non-blocking. By default, blocking read is used.
+         */
+        template <typename T> void copy(const Buffer<T>& buffer, size_t offset, size_t count, T* ptr, cl_bool blocking = CL_TRUE)
         {
-            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, offset*sizeof(T), cb*sizeof(T), ptr, 0, NULL, NULL);
+            cl_int err = clEnqueueReadBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        template <typename T> void write(const Buffer<T>& buffer, const T* ptr, cl_bool blocking = CL_TRUE)
+        /// Copy data from a host memory chunk to a buffer object.
+        /**
+            \param buffer   The buffer object where data are written.
+            \param ptr      The host memory chunk where data are read.
+            \param blocking Indicates if the write operations are blocking or
+                            non-blocking. By default, blocking write is used.
+         */
+        template <typename T> void copy(const T* ptr, const Buffer<T>& buffer, cl_bool blocking = CL_TRUE)
         {
             size_t cb = sizeof(T) * buffer.size();
             cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, 0, cb, ptr, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        template <typename T> void write(const Buffer<T>& buffer, size_t offset, size_t cb, const T* ptr, cl_bool blocking = CL_TRUE)
+        /// Copy data from a host memory chunk to a range in a buffer object.
+        /**
+            \param buffer   The buffer object where data are written.
+            \param offset   The beginning index of items to be written.
+            \param count    The number of items to be written.
+            \param ptr      The host memory chunk where data are read.
+            \param blocking Indicates if the write operations are blocking or
+                            non-blocking. By default, blocking write is used.
+         */
+        template <typename T> void copy(const T* ptr, const Buffer<T>& buffer, size_t offset, size_t count, cl_bool blocking = CL_TRUE)
         {
-            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, offset*sizeof(T), cb*sizeof(T), ptr, 0, NULL, NULL);
+            cl_int err = clEnqueueWriteBuffer(id(), buffer.id(), blocking, offset*sizeof(T), count*sizeof(T), ptr, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        void exec(Kernel k, size_t global_size)
+        /// Execute the kernel function.
+        /** This function execute the specified kernel function by 1-D
+            work-items.
+            
+            \param k            The specified kernel function.
+            \param global_size  The number of global work-items.
+            \param local_size   The number of work-items in a work-group.
+                                If \a local_size is 0, an appropriate number
+                                is determined by the OpenCL implementation.
+         */
+        void exec(Kernel k, size_t global_size, size_t local_size = 0)
         {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, NULL, 0, NULL, NULL);
+            cl_int err;
+            if(local_size == 0)
+                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, NULL, 0, NULL, NULL);
+            else
+                err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, &local_size, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        void exec(Kernel k, size_t global_size, size_t local_size)
+        /// Execute the kernel function.
+        /** This function execute the specified kernel function by 2-D
+            work-items.
+            
+            \param k            The specified kernel function.
+            \param global_size  The number of global work-items in each
+                                dimension.
+            \param local_size   The number of work-items in a work-group.
+                                If any dimension of \a local_size is 0, an
+                                appropriate number is determined by the OpenCL
+                                implementation.
+         */
+        void exec(Kernel k, size2 global_size, size2 local_size = size2(0))
         {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 1, NULL, &global_size, &local_size, 0, NULL, NULL);
+            cl_int err;
+            if(local_size.s[0] == 0 || local_size.s[1] == 0)
+                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, NULL, 0, NULL, NULL);
+            else
+                err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, local_size.s, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
-        void exec(Kernel k, size2 global_size)
+        /// Execute the kernel function.
+        /** This function execute the specified kernel function by 3-D
+            work-items.
+            
+            \param k            The specified kernel function.
+            \param global_size  The number of global work-items in each
+                                dimension.
+            \param local_size   The number of work-items in a work-group.
+                                If any dimension of \a local_size is 0, an
+                                appropriate number is determined by the OpenCL
+                                implementation.
+         */
+        void exec(Kernel k, size3 global_size, size3 local_size = size3(0))
         {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, NULL, 0, NULL, NULL);
-            CLPP_CHECK_ERROR(err);
-        }
-
-        void exec(Kernel k, size2 global_size, size2 local_size)
-        {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 2, NULL, global_size.s, local_size.s, 0, NULL, NULL);
-            CLPP_CHECK_ERROR(err);
-        }
-
-        void exec(Kernel k, size3 global_size)
-        {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, NULL, 0, NULL, NULL);
-            CLPP_CHECK_ERROR(err);
-        }
-
-        void exec(Kernel k, size3 global_size, size3 local_size)
-        {
-            cl_int err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, local_size.s, 0, NULL, NULL);
+            cl_int err;
+            if(local_size.s[0] == 0 || local_size.s[1] == 0 || local_size.s[2] == 0)
+                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, NULL, 0, NULL, NULL);
+            else
+                err = clEnqueueNDRangeKernel(id(), k.id(), 3, NULL, global_size.s, local_size.s, 0, NULL, NULL);
             CLPP_CHECK_ERROR(err);
         }
 
