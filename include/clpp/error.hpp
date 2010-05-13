@@ -11,8 +11,7 @@
 #include <string>
 #include "common.hpp"
 
-#ifdef __PRETTY_FUNCTION__
-#undef __FUNCTION__
+#ifdef __GNUG__ // GCC
 #define __FUNCTION__ __PRETTY_FUNCTION__
 #endif
 

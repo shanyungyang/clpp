@@ -165,11 +165,11 @@ class Context {
         Program readProgramSource(const char* source, const char* options = NULL)
         {
             cl_int err;
-            cl_program p = clCreateProgramWithSource(id(), 1, const_cast<const char**>(&source), NULL, &err);
+            cl_program pid = clCreateProgramWithSource(id(), 1, const_cast<const char**>(&source), NULL, &err);
             CLPP_CHECK_ERROR(err);
-            err = clBuildProgram(p, my_devices.size(), my_devices.data(), options, NULL, NULL);
-            CLPP_CHECK_ERROR(err);
-            return Program(p);
+			Program p(pid);
+			p.build(my_devices);
+            return p;
         }
 
         /// Create a program object.

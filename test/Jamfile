@@ -1,3 +1,4 @@
 unit-test list-devices : list-devices.cpp /clpp//OpenCL ;
 unit-test example : example.cpp /clpp//OpenCL ;
 unit-test event : event.cpp /clpp//OpenCL ;
+unit-test show-compile-error : show-compile-error.cpp /clpp//OpenCL ;
