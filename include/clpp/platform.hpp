@@ -130,7 +130,7 @@ class PlatformList {
         /// Construct the list of available platforms on the system.
         PlatformList()
         {
-            size_t num = 0;
+            cl_uint num = 0;
             cl_int err = clGetPlatformIDs(0, NULL, &num);
             if(num == 0) // we need to check the number before the error code
                 return;
@@ -177,7 +177,7 @@ class DeviceList {
          */
         DeviceList(Platform platform, cl_device_type type = CL_DEVICE_TYPE_DEFAULT)
         {
-            size_t num = 0;
+            cl_uint num = 0;
             cl_int err = clGetDeviceIDs(platform.id(), type, 0, NULL, &num);
             if(num == 0) // check the number before error code
                 return;
