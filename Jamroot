@@ -1,8 +1,14 @@
 # If you are not using the CUDA SDK on Windows, please modify these two lines
 # to match the OpenCL include path and library path on your system.
-OPENCL_INCLUDE = "C:/CUDA/include" ;
-OPENCL_LIBPATH = "C:/CUDA/lib" ;
+
+import os ;
+
+if [ os.name ] = NT
+{
+	OPENCL_INCLUDE = "C:/CUDA/include" ;
+	OPENCL_LIBPATH = "C:/CUDA/lib" ;
+}
 
 lib OpenCL : : <name>OpenCL <search>$(OPENCL_LIBPATH) : : <include>$(OPENCL_INCLUDE) ;
 
-project clpp : requirements <include>"include" ;
+project clpp : requirements <include>"include" <library>/clpp//OpenCL ;
