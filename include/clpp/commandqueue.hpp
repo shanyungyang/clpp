@@ -221,7 +221,7 @@ class CommandQueue {
             src_offset *= sizeof(T);
             dst_offset *= sizeof(T);
             count *= sizeof(T);
-            cl_int err = clEnqueueCopyBuffer(id(), src.id(), dst.id(), src_offset, dst_offset(), count, 0, NULL, &event);
+            cl_int err = clEnqueueCopyBuffer(id(), src.id(), dst.id(), src_offset, dst_offset, count, 0, NULL, &event);
             CLPP_CHECK_ERROR(err);
             return Event(event);
         }
