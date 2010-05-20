@@ -76,7 +76,7 @@ template <typename T> class Buffer : public Memory {
         /** Please use Context::createBuffer instead of using this constructor
             directly.
          */
-        Buffer(cl_mem id) : Memory(id) {}
+        Buffer(cl_mem id = 0) : Memory(id) {}
 
         /// Get the number of elements in this memory object.
         /**

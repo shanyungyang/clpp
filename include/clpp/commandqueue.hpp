@@ -190,6 +190,42 @@ class CommandQueue {
             return Event(event);
         }
 
+        /// Copy data from a buffer object to another buffer object.
+        /**
+            \param src      The source buffer object.
+            \param dst      The destination buffer object.
+            \param count    Number of elements to copy. If \a 0 is specified,
+                            the size of \a src is used instead.
+         */
+        template <typename T> Event copy(const Buffer<T>& src, const Buffer<T>& dst, size_t count = 0)
+        {
+            cl_event event;
+            if(count == 0)
+                count = src.size();
+            cl_int err = clEnqueueCopyBuffer(id(), src.id(), dst.id(), 0, 0, count*sizeof(T), 0, NULL, &event);
+            CLPP_CHECK_ERROR(err);
+            return Event(event);
+        }
+
+        /// Copy data from a buffer object to another buffer object.
+        /**
+            \param src          The source buffer object.
+            \param src_offset   Index of the first element to be read.
+            \param dst          The destination buffer object.
+            \param dst_offset   Index of the first element to be written.
+            \param count        Number of elements to copy.
+         */
+        template <typename T> Event copy(const Buffer<T>& src, size_t src_offset, const Buffer<T>& dst, size_t dst_offset, size_t count)
+        {
+            cl_event event;
+            src_offset *= sizeof(T);
+            dst_offset *= sizeof(T);
+            count *= sizeof(T);
+            cl_int err = clEnqueueCopyBuffer(id(), src.id(), dst.id(), src_offset, dst_offset(), count, 0, NULL, &event);
+            CLPP_CHECK_ERROR(err);
+            return Event(event);
+        }
+
         /// Execute the kernel function.
         /** This function execute the specified kernel function by 1-D
             work-items.

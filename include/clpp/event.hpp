@@ -22,7 +22,7 @@ class Event {
         /** Don't use this constructor directly. Use member functions in
             CommandQueue to obtain event objects.
          */
-        Event(cl_event id) : my_resource(id)
+        Event(cl_event id = 0) : my_resource(id)
         {}
 
         /// Get the \c cl_event object created by the OpenCL API.

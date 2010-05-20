@@ -26,7 +26,7 @@ class Program {
             Context::readProgramSource or Context::readProgramSourceFile
             to create a program object.
          */
-        Program(cl_program p) : my_resource(p) {}
+        Program(cl_program p = 0) : my_resource(p) {}
 
         /// Get the \c cl_program object created by OpenCL API.
         /**

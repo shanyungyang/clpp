@@ -61,7 +61,7 @@ class Image : public Memory {
 
 class Image2D : public Image {
     public:
-        Image2D(cl_mem id) : Image(id) {}
+        Image2D(cl_mem id = 0) : Image(id) {}
 
         size2 size() const
         {
@@ -75,7 +75,7 @@ class Image2D : public Image {
 
 class Image3D : public Image {
     public:
-        Image3D(cl_mem id) : Image(id) {}
+        Image3D(cl_mem id = 0) : Image(id) {}
 
         size3 size()
         {

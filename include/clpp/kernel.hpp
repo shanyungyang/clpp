@@ -23,7 +23,7 @@ class Kernel {
         /** Instead of using this constructor directly, please use
             Program::kernel to construct a kernel object.
          */
-        Kernel(cl_kernel id) : my_resource(id) {}
+        Kernel(cl_kernel id = 0) : my_resource(id) {}
 
         /// Get the \c cl_kernel object created by OpenCL API.
         /**
