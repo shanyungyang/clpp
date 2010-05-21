@@ -70,6 +70,11 @@ class Image2D : public Image {
             s.s[1] = height();
             return s;
         }
+
+        void swap(Image2D& mem) throw()
+        {
+            my_resource.swap(mem.my_resource);
+        }
 }; // class Image2D
 
 
@@ -91,6 +96,10 @@ class Image3D : public Image {
             return getImageInfo<size_t>(CL_IMAGE_DEPTH);
         }
 
+        void swap(Image3D& mem) throw()
+        {
+            my_resource.swap(mem.my_resource);
+        }
 }; // class Image3D
 
 } // namespace clpp

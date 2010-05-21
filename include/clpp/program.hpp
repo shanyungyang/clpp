@@ -127,6 +127,15 @@ class Program {
             return Kernel(k);
         }
 
+        /// Swap the pointed content with another program object.
+        /**
+            \param p    The program object to be swapped with.
+         */
+        void swap(Program& p) throw()
+        {
+            my_resource.swap(p.my_resource);
+        }
+
 		/// The exception object for build errors.
 		/** When a program is failed to be built, a BuildError object is
 			thrown and the compiler error message is recorded.

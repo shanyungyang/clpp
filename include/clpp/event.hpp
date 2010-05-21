@@ -148,6 +148,15 @@ class Event {
             clWaitForEvents(1, &e);
         }
 
+        /// Swap the pointed content with another event object.
+        /**
+            \param e    The event object to be swapped with.
+         */
+        void swap(Event& e) throw()
+        {
+            my_resource.swap(e.my_resource);
+        }
+
     private:
         Resource<cl_event> my_resource;
 }; // class Event

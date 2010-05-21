@@ -6,66 +6,68 @@
 #ifndef CLPP_RESOURCE_HPP
 #define CLPP_RESOURCE_HPP
 
-#include <CL/cl.h>
+#include "common.hpp"
+#include "error.hpp"
 
 namespace clpp {
 
 template <typename Handle> struct ResourcePolicy;
 
 template <> struct ResourcePolicy<cl_context> {
-    static cl_context null() {    return 0; }
-    static void retain(cl_context h) {    clRetainContext(h);    }
-    static void release(cl_context h) { clReleaseContext(h); }
+    static cl_context null() throw() { return 0; }
+    static cl_int retain(cl_context h) { return clRetainContext(h); }
+    static cl_int release(cl_context h) throw() { return clReleaseContext(h); }
 }; // struct ResourcePolicy<cl_context>
 
 template <> struct ResourcePolicy<cl_command_queue> {
-    static cl_command_queue null() { return 0; }
-    static void retain(cl_command_queue h) { clRetainCommandQueue(h); }
-    static void release(cl_command_queue h) { clReleaseCommandQueue(h); }
+    static cl_command_queue null() throw() { return 0; }
+    static cl_int retain(cl_command_queue h) { return clRetainCommandQueue(h); }
+    static cl_int release(cl_command_queue h) throw() { return clReleaseCommandQueue(h); }
 }; // struct ResourcePolicy<cl_command_queue>
 
 template <> struct ResourcePolicy<cl_mem> {
-    static cl_mem null() { return 0; }
-    static void retain(cl_mem h) { clRetainMemObject(h); }
-    static void release(cl_mem h) { clReleaseMemObject(h); }
+    static cl_mem null() throw() { return 0; }
+    static cl_int retain(cl_mem h) { return clRetainMemObject(h); }
+    static cl_int release(cl_mem h) throw() { return clReleaseMemObject(h); }
 }; // struct ResourcePolicy<cl_mem>
 
 template <> struct ResourcePolicy<cl_program> {
-    static cl_program null() { return 0; }
-    static void retain(cl_program h) { clRetainProgram(h); }
-    static void release(cl_program h) { clReleaseProgram(h); }
+    static cl_program null() throw() { return 0; }
+    static cl_int retain(cl_program h) { return clRetainProgram(h); }
+    static cl_int release(cl_program h) throw() { return clReleaseProgram(h); }
 }; // struct ResourcePolicy<cl_program>
 
 template <> struct ResourcePolicy<cl_kernel> {
-    static cl_kernel null() { return 0; }
-    static void retain(cl_kernel h) { clRetainKernel(h); }
-    static void release(cl_kernel h) { clReleaseKernel(h); }
+    static cl_kernel null() throw() { return 0; }
+    static cl_int retain(cl_kernel h) { return clRetainKernel(h); }
+    static cl_int release(cl_kernel h) throw() { return clReleaseKernel(h); }
 }; // struct ResourcePolicy<cl_kernel>
 
 template <> struct ResourcePolicy<cl_event> {
-    static cl_event null() { return 0; }
-    static void retain(cl_event h) { clRetainEvent(h); }
-    static void release(cl_event h) { clReleaseEvent(h); }
+    static cl_event null() throw() { return 0; }
+    static cl_int retain(cl_event h) { return clRetainEvent(h); }
+    static cl_int release(cl_event h) throw() { return clReleaseEvent(h); }
 }; // struct ResourcePolicy<cl_event>
 
+/// A general resource wrapper.
 template <typename Handle> class Resource {
     public:
         typedef ResourcePolicy<Handle> Policy;
 
         Resource() : my_handle(Policy::null()) {}
 
-        Resource(Handle h) : my_handle(h) {}
+        explicit Resource(Handle h) : my_handle(h) {}
 
         Resource(const Resource& r) : my_handle(r.my_handle)
         {
             if(my_handle != Policy::null())
-                Policy::retain(my_handle);
+                CLPP_CHECK_ERROR(Policy::retain(my_handle));
         }
 
         void reset(Handle h)
         {
             if(my_handle != Policy::null() && my_handle != h)
-                Policy::release(my_handle);
+                CLPP_CHECK_ERROR(Policy::release(my_handle));
 
             my_handle = h;
         }
@@ -77,24 +79,22 @@ template <typename Handle> class Resource {
 
         Resource& operator=(const Resource& r)
         {
-            if(my_handle == *r)
-                return *this; // silly self-assignment
-
-            if(my_handle != Policy::null())
-                Policy::release(my_handle);
-
-            my_handle = r.my_handle;
-
-            if(my_handle != Policy::null())
-                Policy::retain(my_handle);
-
+            Resource<Handle> tmp(r);
+            swap(tmp);
             return *this;
         }
 
-        ~Resource()
+        ~Resource() throw()
         {
             if(my_handle != Policy::null())
                 Policy::release(my_handle);
+        }
+
+        void swap(Resource<Handle>& r) throw()
+        {
+            Handle tmp = my_handle;
+            my_handle = r.my_handle;
+            r.my_handle = tmp;
         }
 
     private:

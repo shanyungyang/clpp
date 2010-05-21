@@ -120,6 +120,15 @@ class Kernel {
             CLPP_CHECK_ERROR(err);
         }
 
+        /// Swap the pointed content with another kernel object.
+        /**
+            \param k    The kernel object to be swapped with.
+         */
+        void swap(Kernel& k) throw()
+        {
+            my_resource.swap(k.my_resource);
+        }
+
     private:
         Resource<cl_kernel> my_resource;
 }; // class Kernel

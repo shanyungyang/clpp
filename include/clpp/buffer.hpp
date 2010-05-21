@@ -50,7 +50,7 @@ class Memory {
             return result;
         }
 
-        virtual ~Memory(){}
+        virtual ~Memory() throw() {}
 
     protected:
         Memory(cl_mem id) : my_resource(id) {}
@@ -85,6 +85,15 @@ template <typename T> class Buffer : public Memory {
         size_t size() const
         {
             return getInfo<size_t>(CL_MEM_SIZE) / sizeof(T);
+        }
+
+        /// Swap the pointed content with another buffer object.
+        /**
+            \param mem  The buffer object to be swapped with.
+         */
+        void swap(Memory& mem) throw()
+        {
+            my_resource.swap(mem.my_resource);
         }
 }; // template <typename T> class Buffer
 
