@@ -226,7 +226,7 @@ class Device {
 /// Get device information string.
 /** This function is a specialized version of Device::getInfo.
  */
-template <> std::string Device::getInfo<std::string>(cl_device_info info) const
+template <> inline std::string Device::getInfo<std::string>(cl_device_info info) const
 {
     size_t len;
     cl_int err = clGetDeviceInfo(my_id, info, 0, NULL, &len);

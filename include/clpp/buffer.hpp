@@ -91,7 +91,7 @@ template <typename T> class Buffer : public Memory {
         /**
             \param mem  The buffer object to be swapped with.
          */
-        void swap(Memory& mem) throw()
+        void swap(Buffer& mem) throw()
         {
             my_resource.swap(mem.my_resource);
         }
