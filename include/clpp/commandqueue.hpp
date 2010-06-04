@@ -296,6 +296,14 @@ class CommandQueue {
             return Event(event);
         }
 
+        Event marker()
+        {
+            cl_event event;
+            cl_int err = clEnqueueMarker(id(), &event);
+            CLPP_CHECK_ERROR(err);
+            return Event(event);
+        }
+
     private:
         Resource<cl_command_queue> my_resource;
 }; // class CommandQueue
