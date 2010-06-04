@@ -168,7 +168,7 @@ class Context {
             cl_program pid = clCreateProgramWithSource(id(), 1, const_cast<const char**>(&source), NULL, &err);
             CLPP_CHECK_ERROR(err);
 			Program p(pid);
-			p.build(my_devices);
+			p.build(my_devices, options);
             return p;
         }
 
